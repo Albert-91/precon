@@ -1,4 +1,6 @@
 import curses
+import time
+
 import RPi.GPIO as GPIO
 
 
@@ -62,21 +64,27 @@ def stop():
     GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, False)
 
 
+def drive_on_pressed_button(drive_callback):
+    drive_callback()
+    time.sleep(1)
+    stop()
+
+
 def steer():
+    print("Press key arrows OR 'WSAD' to drive your vehicle")
+    print("Press 'q' key quit")
     while True:
         char = screen.getch()
         if char == ord('q'):
             break
-        elif char == curses.KEY_UP:
-            drive_forward()
-        elif char == curses.KEY_DOWN:
-            drive_backward()
-        elif char == curses.KEY_RIGHT:
-            turn_right()
-        elif char == curses.KEY_LEFT:
-            turn_left()
-        elif char == 10:
-            stop()
+        elif char == curses.KEY_UP or char == ord('w'):
+            drive_on_pressed_button(drive_forward)
+        elif char == curses.KEY_DOWN or char == ord('s'):
+            drive_on_pressed_button(drive_backward)
+        elif char == curses.KEY_RIGHT or char == ord('d'):
+            drive_on_pressed_button(turn_right)
+        elif char == curses.KEY_LEFT or char == ord('a'):
+            drive_on_pressed_button(turn_left)
 
 
 if __name__ == '__main__':
