@@ -1,7 +1,5 @@
-import curses
-import time
-
 import RPi.GPIO as GPIO
+from pynput.keyboard import Key, Listener
 
 
 GPIO.setmode(GPIO.BOARD)
@@ -64,39 +62,38 @@ def stop():
     GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, False)
 
 
-def drive_on_pressed_button(drive_callback):
-    drive_callback()
-    time.sleep(1)
-    stop()
+class QuitListener(Exception):
+    pass
 
 
 def steer():
-    print("Press key arrows OR 'WSAD' to drive your vehicle")
+    def on_press(key):
+        if key.char == 'q':
+            raise QuitListener
+        action_to_press = {
+            Key.up: drive_forward,
+            Key.down: drive_backward,
+            Key.right: turn_right,
+            Key.left: turn_left
+        }
+        action = action_to_press.get(key)
+        if action:
+            action()
+
+    def on_release(key):
+        if key in [Key.up, Key.down, Key.left, Key.right]:
+            stop()
+
+    print("Press key arrows to drive your vehicle")
     print("Press 'q' key quit")
-    while True:
-        char = screen.getch()
-        if char == ord('q'):
-            break
-        elif char == curses.KEY_UP or char == ord('w'):
-            drive_on_pressed_button(drive_forward)
-        elif char == curses.KEY_DOWN or char == ord('s'):
-            drive_on_pressed_button(drive_backward)
-        elif char == curses.KEY_RIGHT or char == ord('d'):
-            drive_on_pressed_button(turn_right)
-        elif char == curses.KEY_LEFT or char == ord('a'):
-            drive_on_pressed_button(turn_left)
+    with Listener(on_press=on_press, on_release=on_release, suppress=True) as listener:
+        listener.join()
 
 
 if __name__ == '__main__':
-    screen = curses.initscr()
-    curses.noecho()
-    curses.cbreak()
-    screen.keypad(True)
     try:
         steer()
+    except QuitListener:
+        print("Quitting from steering...")
     finally:
-        curses.nocbreak()
-        screen.keypad(False)
-        curses.echo()
-        curses.endwin()
         GPIO.cleanup()
