@@ -66,7 +66,7 @@ def stop_driving():
 
 def drive_on_pressed_button(drive_callback):
     drive_callback()
-    time.sleep(0.01)
+    time.sleep(0.1)
     stop_driving()
 
 
