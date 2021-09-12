@@ -1,5 +1,7 @@
+import curses
+import time
+
 import RPi.GPIO as GPIO
-import keyboard
 
 
 GPIO.setmode(GPIO.BOARD)
@@ -16,23 +18,23 @@ GPIO.setup(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.OUT)
 
 
 def drive_right_engine_forward():
-    GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, False)
-    GPIO.output(RIGHT_ENGINE_FORWARD_PIN_IDX, True)
+    GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
+    GPIO.output(RIGHT_ENGINE_FORWARD_PIN_IDX, GPIO.HIGH)
 
 
 def drive_right_engine_backward():
-    GPIO.output(RIGHT_ENGINE_FORWARD_PIN_IDX, False)
-    GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, True)
+    GPIO.output(RIGHT_ENGINE_FORWARD_PIN_IDX, GPIO.LOW)
+    GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.HIGH)
 
 
 def drive_left_engine_forward():
-    GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, False)
-    GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, True)
+    GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
+    GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.HIGH)
 
 
 def drive_left_engine_backward():
-    GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, False)
-    GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, True)
+    GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.LOW)
+    GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.HIGH)
 
 
 def drive_forward():
@@ -55,33 +57,46 @@ def turn_left():
     drive_right_engine_forward()
 
 
-def stop():
-    GPIO.output(RIGHT_ENGINE_FORWARD_PIN_IDX, False)
-    GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, False)
-    GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, False)
-    GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, False)
+def stop_driving():
+    GPIO.output(RIGHT_ENGINE_FORWARD_PIN_IDX, GPIO.LOW)
+    GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
+    GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.LOW)
+    GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
+
+
+def drive_on_pressed_button(drive_callback):
+    drive_callback()
+    time.sleep(0.01)
+    stop_driving()
 
 
 def steer():
     print("Press key arrows OR 'WSAD' to drive your vehicle")
     print("Press 'q' key quit")
     while True:
-        if keyboard.is_pressed('q'):
+        char = screen.getch()
+        if char == ord('q'):
             break
-        elif keyboard.is_pressed('w') or keyboard.is_pressed(keyboard.KEY_UP):
-            drive_forward()
-        elif keyboard.is_pressed('s') or keyboard.is_pressed(keyboard.KEY_DOWN):
-            drive_backward()
-        elif keyboard.is_pressed('a') or keyboard.is_pressed("left"):
-            turn_left()
-        elif keyboard.is_pressed('d') or keyboard.is_pressed("right"):
-            turn_right()
-        else:
-            stop()
+        elif char == curses.KEY_UP or char == ord('w'):
+            drive_on_pressed_button(drive_forward)
+        elif char == curses.KEY_DOWN or char == ord('s'):
+            drive_on_pressed_button(drive_backward)
+        elif char == curses.KEY_RIGHT or char == ord('d'):
+            drive_on_pressed_button(turn_right)
+        elif char == curses.KEY_LEFT or char == ord('a'):
+            drive_on_pressed_button(turn_left)
 
 
 if __name__ == '__main__':
+    screen = curses.initscr()
+    curses.noecho()
+    curses.cbreak()
+    screen.keypad(True)
     try:
         steer()
     finally:
+        curses.nocbreak()
+        screen.keypad(False)
+        curses.echo()
+        curses.endwin()
         GPIO.cleanup()
