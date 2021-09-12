@@ -85,6 +85,8 @@ def steer():
             drive_on_pressed_button(turn_right)
         elif char == curses.KEY_LEFT or char == ord('a'):
             drive_on_pressed_button(turn_left)
+        else:
+            stop()
 
 
 if __name__ == '__main__':
