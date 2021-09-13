@@ -1,0 +1,7 @@
+-r app.txt
+
+fake-rpi==0.7.1
+pytest==6.2.5
+pytest-flakes==4.0.3
+pytest-mock==3.6.1
+pytest-pythonpath==0.7.3

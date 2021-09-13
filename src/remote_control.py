@@ -1,7 +1,11 @@
 import curses
 import time
 
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except (RuntimeError, ModuleNotFoundError):
+    import fake_rpi
+    GPIO = fake_rpi.RPi.GPIO
 
 
 GPIO.setmode(GPIO.BOARD)
@@ -70,7 +74,7 @@ def drive_on_pressed_button(drive_callback):
     stop_driving()
 
 
-def steer():
+def steer_vehicle(screen):
     print("Press key arrows OR 'WSAD' to drive your vehicle")
     print("Press 'q' key quit")
     while True:
@@ -93,7 +97,7 @@ if __name__ == '__main__':
     curses.cbreak()
     screen.keypad(True)
     try:
-        steer()
+        steer_vehicle(screen)
     finally:
         curses.nocbreak()
         screen.keypad(False)
