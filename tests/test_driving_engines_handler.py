@@ -1,6 +1,6 @@
 import pytest
 
-from devices_handlers.driving_engines import drive_forward, drive_backward, turn_right, turn_left
+from devices_handlers.driving_engines import drive_forward, drive_backward, turn_right, turn_left, stop_driving
 
 
 @pytest.fixture
@@ -88,4 +88,21 @@ def test_turning_left(
     output.assert_any_call(right_engine_forward_pin, False)
     output.assert_any_call(left_engine_forward_pin, True)
     output.assert_any_call(right_engine_backward_pin, True)
+    output.assert_any_call(left_engine_backward_pin, False)
+
+
+def test_stop_drives(
+    mocker,
+    right_engine_forward_pin,
+    right_engine_backward_pin,
+    left_engine_forward_pin,
+    left_engine_backward_pin,
+):
+    output = mocker.patch("devices_handlers.driving_engines.fake_rpi.RPi.GPIO.output")
+
+    stop_driving()
+
+    output.assert_any_call(right_engine_forward_pin, False)
+    output.assert_any_call(left_engine_forward_pin, False)
+    output.assert_any_call(right_engine_backward_pin, False)
     output.assert_any_call(left_engine_backward_pin, False)

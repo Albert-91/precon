@@ -23,8 +23,12 @@ def _initialize_sensor() -> None:
 
 def _get_echo_time(signal_level: bool) -> float:
     pulse_time = 0.0
+    start_time = time.time()
     while GPIO.input(ECHO_PIN_IDX) == signal_level:
         pulse_time = time.time()
+        # protection before not coming echo
+        if time.time() - start_time > 2:
+            return pulse_time
     return pulse_time
 
 
