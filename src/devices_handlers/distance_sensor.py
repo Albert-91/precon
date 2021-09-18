@@ -16,25 +16,28 @@ GPIO.setup(TRIGGER_PIN, GPIO.OUT)
 GPIO.setup(ECHO_PIN, GPIO.IN)
 
 
-def _initilize_sensor():
+def _initilize_sensor() -> None:
     GPIO.output(TRIGGER_PIN, True)
     time.sleep(0.00001)
     GPIO.output(TRIGGER_PIN, False)
 
 
-def _get_echo_time(signal_level: bool):
+def _get_echo_time(signal_level: bool) -> float:
+    pulse_time = 0.0
     while GPIO.input(ECHO_PIN) == signal_level:
         pulse_time = time.time()
     return pulse_time
 
 
-def _compute_distance(signal_delay):
-    # divider for uS to s
-    const_divider = 1000000 / 58
-    return signal_delay * const_divider
+def _compute_distance(signal_delay: float) -> float:
+    # multiply with the sonic speed (34300 cm/s)
+    # and divide by 2, because there and back
+    return (signal_delay * 34300) / 2
 
 
-def handle_distance_sensor() -> int:
+def get_distance_ahead() -> int:
+    """Function returns distance in `cm`"""
+
     _initilize_sensor()
     pulse_start, pulse_end = _get_echo_time(False), _get_echo_time(True)
     signal_delay = pulse_end - pulse_start
