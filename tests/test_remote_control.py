@@ -36,17 +36,13 @@ def test_drive_on_pressed_keys(mocker, create_screen, key, called_function):
     drive_func.assert_called_once()
 
 
-@pytest.mark.parametrize('key, called_function', [
-    (curses.KEY_UP, "drive_forward"),
-    ("w", "drive_forward"),
-    (curses.KEY_DOWN, "drive_backward"),
-    ("s", "drive_backward"),
-    (curses.KEY_LEFT, "turn_left"),
-    ("a", "turn_left"),
-    (curses.KEY_RIGHT, "turn_right"),
-    ("d", "turn_right"),
+@pytest.mark.parametrize('key', [
+    curses.KEY_UP, "w",
+    curses.KEY_DOWN, "s",
+    curses.KEY_LEFT, "a",
+    curses.KEY_RIGHT, "d",
 ])
-def test_stop_after_each_drive(mocker, create_screen, key, called_function):
+def test_stop_after_each_drive(mocker, create_screen, key):
     stop_func = mocker.patch("remote_control.stop_driving")
     screen = create_screen(key)
 
