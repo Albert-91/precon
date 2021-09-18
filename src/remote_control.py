@@ -75,7 +75,7 @@ def drive_on_pressed_button(drive_callback: Callable) -> None:
     stop_driving()
 
 
-def steer_vehicle(screen: curses._CursesWindow) -> None:
+def steer_vehicle(screen) -> None:
     print("Press key arrows OR 'WSAD' to drive your vehicle")
     print("Press 'q' key quit")
     while True:
