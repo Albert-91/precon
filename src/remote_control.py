@@ -23,6 +23,8 @@ GPIO.setup(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.OUT)
 GPIO.setup(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.OUT)
 GPIO.setup(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.OUT)
 
+DISTANCE_AHEAD_TO_STOP = 3
+
 
 def drive_right_engine_forward() -> None:
     GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
@@ -85,7 +87,10 @@ def steer_vehicle(screen) -> None:
         if char == ord('q'):
             break
         elif char == curses.KEY_UP or char == ord('w'):
-            drive_on_pressed_button(drive_forward)
+            if get_distance_ahead() > DISTANCE_AHEAD_TO_STOP:
+                drive_on_pressed_button(drive_forward)
+            else:
+                stop_driving()
         elif char == curses.KEY_DOWN or char == ord('s'):
             drive_on_pressed_button(drive_backward)
         elif char == curses.KEY_RIGHT or char == ord('d'):

@@ -8,7 +8,6 @@ except (RuntimeError, ModuleNotFoundError):
 
 
 GPIO.setmode(GPIO.BCM)
-# GPIO.setwarnings(False)
 TRIGGER_PIN_IDX = 18
 ECHO_PIN_IDX = 23
 
@@ -49,7 +48,7 @@ if __name__ == '__main__':
     try:
         while True:
             dist = get_distance_ahead()
-            print(dist)
+            print(dist, " cm")
             time.sleep(1)
     finally:
         GPIO.cleanup()
