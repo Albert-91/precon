@@ -18,44 +18,44 @@ GPIO.setup(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.OUT)
 GPIO.setup(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.OUT)
 
 
-def drive_right_engine_forward() -> None:
+def _drive_right_engine_forward() -> None:
     GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
     GPIO.output(RIGHT_ENGINE_FORWARD_PIN_IDX, GPIO.HIGH)
 
 
-def drive_right_engine_backward() -> None:
+def _drive_right_engine_backward() -> None:
     GPIO.output(RIGHT_ENGINE_FORWARD_PIN_IDX, GPIO.LOW)
     GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.HIGH)
 
 
-def drive_left_engine_forward() -> None:
+def _drive_left_engine_forward() -> None:
     GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
     GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.HIGH)
 
 
-def drive_left_engine_backward() -> None:
+def _drive_left_engine_backward() -> None:
     GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.LOW)
     GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.HIGH)
 
 
 def drive_forward() -> None:
-    drive_left_engine_forward()
-    drive_right_engine_forward()
+    _drive_left_engine_forward()
+    _drive_right_engine_forward()
 
 
 def drive_backward() -> None:
-    drive_left_engine_backward()
-    drive_right_engine_backward()
+    _drive_left_engine_backward()
+    _drive_right_engine_backward()
 
 
 def turn_right() -> None:
-    drive_left_engine_backward()
-    drive_right_engine_forward()
+    _drive_left_engine_backward()
+    _drive_right_engine_forward()
 
 
 def turn_left() -> None:
-    drive_left_engine_forward()
-    drive_right_engine_backward()
+    _drive_left_engine_forward()
+    _drive_right_engine_backward()
 
 
 def stop_driving() -> None:
