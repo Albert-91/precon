@@ -7,9 +7,9 @@ except (RuntimeError, ModuleNotFoundError):
     GPIO = fake_rpi.RPi.GPIO
 
 
-GPIO.setmode(GPIO.BCM)
-TRIGGER_PIN_IDX = 18
-ECHO_PIN_IDX = 23
+GPIO.setmode(GPIO.BOARD)
+TRIGGER_PIN_IDX = 12
+ECHO_PIN_IDX = 16
 
 GPIO.setup(TRIGGER_PIN_IDX, GPIO.OUT)
 GPIO.setup(ECHO_PIN_IDX, GPIO.IN)
