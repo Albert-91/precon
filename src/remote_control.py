@@ -3,6 +3,7 @@ import time
 from typing import Callable
 
 from devices_handlers.distance_sensor import get_distance_ahead
+from devices_handlers.driving_engines import turn_right, turn_left, drive_backward, stop_driving, drive_forward
 
 try:
     import RPi.GPIO as GPIO
@@ -11,72 +12,32 @@ except (RuntimeError, ModuleNotFoundError):
     GPIO = fake_rpi.RPi.GPIO
 
 
-GPIO.setmode(GPIO.BOARD)
-
-RIGHT_ENGINE_FORWARD_PIN_IDX = 7
-RIGHT_ENGINE_BACKWARD_PIN_IDX = 11
-LEFT_ENGINE_FORWARD_PIN_IDX = 13
-LEFT_ENGINE_BACKWARD_PIN_IDX = 15
-
-GPIO.setup(RIGHT_ENGINE_FORWARD_PIN_IDX, GPIO.OUT)
-GPIO.setup(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.OUT)
-GPIO.setup(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.OUT)
-GPIO.setup(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.OUT)
-
 DISTANCE_AHEAD_TO_STOP = 3
 
 
-def drive_right_engine_forward() -> None:
-    GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
-    GPIO.output(RIGHT_ENGINE_FORWARD_PIN_IDX, GPIO.HIGH)
-
-
-def drive_right_engine_backward() -> None:
-    GPIO.output(RIGHT_ENGINE_FORWARD_PIN_IDX, GPIO.LOW)
-    GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.HIGH)
-
-
-def drive_left_engine_forward() -> None:
-    GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
-    GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.HIGH)
-
-
-def drive_left_engine_backward() -> None:
-    GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.LOW)
-    GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.HIGH)
-
-
-def drive_forward() -> None:
-    drive_left_engine_forward()
-    drive_right_engine_forward()
-
-
-def drive_backward() -> None:
-    drive_left_engine_backward()
-    drive_right_engine_backward()
-
-
-def turn_right() -> None:
-    drive_left_engine_forward()
-    drive_right_engine_backward()
-
-
-def turn_left() -> None:
-    drive_left_engine_backward()
-    drive_right_engine_forward()
-
-
-def stop_driving() -> None:
-    GPIO.output(RIGHT_ENGINE_FORWARD_PIN_IDX, GPIO.LOW)
-    GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
-    GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.LOW)
-    GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
-
-
-def drive_on_pressed_button(drive_callback: Callable) -> None:
+def _drive_on_pressed_button(drive_callback: Callable) -> None:
     drive_callback()
     time.sleep(0.1)
     stop_driving()
+
+
+def _handle_driving_forward() -> None:
+    if get_distance_ahead() > DISTANCE_AHEAD_TO_STOP:
+        _drive_on_pressed_button(drive_forward)
+    else:
+        stop_driving()
+
+
+def _handle_driving_backward() -> None:
+    _drive_on_pressed_button(drive_backward)
+
+
+def _handle_turning_left() -> None:
+    _drive_on_pressed_button(turn_left)
+
+
+def _handle_turning_right() -> None:
+    _drive_on_pressed_button(turn_right)
 
 
 def steer_vehicle(screen) -> None:
@@ -87,16 +48,13 @@ def steer_vehicle(screen) -> None:
         if char == ord('q'):
             break
         elif char == curses.KEY_UP or char == ord('w'):
-            if get_distance_ahead() > DISTANCE_AHEAD_TO_STOP:
-                drive_on_pressed_button(drive_forward)
-            else:
-                stop_driving()
+            _handle_driving_forward()
         elif char == curses.KEY_DOWN or char == ord('s'):
-            drive_on_pressed_button(drive_backward)
+            _handle_driving_backward()
         elif char == curses.KEY_RIGHT or char == ord('d'):
-            drive_on_pressed_button(turn_right)
+            _handle_turning_right()
         elif char == curses.KEY_LEFT or char == ord('a'):
-            drive_on_pressed_button(turn_left)
+            _handle_turning_left()
 
 
 if __name__ == '__main__':
