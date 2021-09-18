@@ -82,8 +82,6 @@ def steer_vehicle(screen) -> None:
     print("Press 'q' key quit")
     while True:
         char = screen.getch()
-        distance_ahead = get_distance_ahead()
-        print(distance_ahead)
         if char == ord('q'):
             break
         elif char == curses.KEY_UP or char == ord('w'):

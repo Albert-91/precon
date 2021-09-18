@@ -43,3 +43,11 @@ def get_distance_ahead() -> int:
     signal_delay = pulse_end - pulse_start
     distance = _compute_distance(signal_delay)
     return int(distance)
+
+
+if __name__ == '__main__':
+    try:
+        dist = get_distance_ahead()
+        print(dist)
+    finally:
+        GPIO.cleanup()
