@@ -9,22 +9,22 @@ except (RuntimeError, ModuleNotFoundError):
 
 GPIO.setmode(GPIO.BCM)
 # GPIO.setwarnings(False)
-TRIGGER_PIN = 12
-ECHO_PIN = 16
+TRIGGER_PIN_IDX = 18
+ECHO_PIN_IDX = 23
 
-GPIO.setup(TRIGGER_PIN, GPIO.OUT)
-GPIO.setup(ECHO_PIN, GPIO.IN)
+GPIO.setup(TRIGGER_PIN_IDX, GPIO.OUT)
+GPIO.setup(ECHO_PIN_IDX, GPIO.IN)
 
 
 def _initilize_sensor() -> None:
-    GPIO.output(TRIGGER_PIN, True)
+    GPIO.output(TRIGGER_PIN_IDX, True)
     time.sleep(0.00001)
-    GPIO.output(TRIGGER_PIN, False)
+    GPIO.output(TRIGGER_PIN_IDX, False)
 
 
 def _get_echo_time(signal_level: bool) -> float:
     pulse_time = 0.0
-    while GPIO.input(ECHO_PIN) == signal_level:
+    while GPIO.input(ECHO_PIN_IDX) == signal_level:
         pulse_time = time.time()
     return pulse_time
 
