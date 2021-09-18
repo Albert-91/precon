@@ -2,6 +2,8 @@ import curses
 import time
 from typing import Callable
 
+from devices_handlers.distance_sensor import get_distance_ahead
+
 try:
     import RPi.GPIO as GPIO
 except (RuntimeError, ModuleNotFoundError):
@@ -80,6 +82,8 @@ def steer_vehicle(screen) -> None:
     print("Press 'q' key quit")
     while True:
         char = screen.getch()
+        distance_ahead = get_distance_ahead()
+        print(distance_ahead)
         if char == ord('q'):
             break
         elif char == curses.KEY_UP or char == ord('w'):
