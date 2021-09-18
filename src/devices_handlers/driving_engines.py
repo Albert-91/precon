@@ -49,13 +49,13 @@ def drive_backward() -> None:
 
 
 def turn_right() -> None:
-    drive_left_engine_forward()
-    drive_right_engine_backward()
+    drive_left_engine_backward()
+    drive_right_engine_forward()
 
 
 def turn_left() -> None:
-    drive_left_engine_backward()
-    drive_right_engine_forward()
+    drive_left_engine_forward()
+    drive_right_engine_backward()
 
 
 def stop_driving() -> None:
