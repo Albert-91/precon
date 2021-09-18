@@ -50,5 +50,6 @@ if __name__ == '__main__':
         while True:
             dist = get_distance_ahead()
             print(dist)
+            time.sleep(1)
     finally:
         GPIO.cleanup()
