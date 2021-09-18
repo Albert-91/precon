@@ -86,3 +86,23 @@ def test_stop_when_distance_ahead_is_equal_or_less_than_3_and_robot_is_driving_f
 
     stop_func.assert_called_once()
     drive_func.assert_not_called()
+
+
+@pytest.mark.parametrize('key, called_function', [
+    (curses.KEY_DOWN, "drive_backward"),
+    ("s", "drive_backward"),
+    (curses.KEY_LEFT, "turn_left"),
+    ("a", "turn_left"),
+    (curses.KEY_RIGHT, "turn_right"),
+    ("d", "turn_right"),
+])
+def test_not_stop_when_distance_ahead_is_equal_or_less_than_3(
+    mocker, create_screen, distance_ahead_to_stop, key, called_function
+):
+    drive_func = mocker.patch(f"remote_control.{called_function}")
+    mocker.patch("remote_control.get_distance_ahead", return_value=distance_ahead_to_stop)
+    screen = create_screen(key)
+
+    steer_vehicle(screen)
+
+    drive_func.assert_called_once()
