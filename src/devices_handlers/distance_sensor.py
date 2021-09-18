@@ -9,8 +9,8 @@ except (RuntimeError, ModuleNotFoundError):
 
 GPIO.setmode(GPIO.BCM)
 # GPIO.setwarnings(False)
-TRIGGER_PIN = 21
-ECHO_PIN = 20
+TRIGGER_PIN = 12
+ECHO_PIN = 16
 
 GPIO.setup(TRIGGER_PIN, GPIO.OUT)
 GPIO.setup(ECHO_PIN, GPIO.IN)
