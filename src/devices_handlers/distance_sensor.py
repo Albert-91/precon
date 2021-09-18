@@ -47,7 +47,8 @@ def get_distance_ahead() -> int:
 
 if __name__ == '__main__':
     try:
-        dist = get_distance_ahead()
-        print(dist)
+        while True:
+            dist = get_distance_ahead()
+            print(dist)
     finally:
         GPIO.cleanup()
