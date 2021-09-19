@@ -21,7 +21,7 @@ def _initialize_sensor() -> None:
     GPIO.output(TRIGGER_PIN_IDX, False)
 
 
-def _get_echo_time(signal_level: bool) -> float:
+async def _get_echo_time(signal_level: bool) -> float:
     pulse_time = 0.0
     start_time = time.time()
     while GPIO.input(ECHO_PIN_IDX) == signal_level:
@@ -38,11 +38,11 @@ def _compute_distance(signal_delay: float) -> float:
     return (signal_delay * 34300) / 2
 
 
-def get_distance_ahead() -> int:
+async def get_distance_ahead() -> int:
     """Function returns distance in `cm`"""
 
     _initialize_sensor()
-    pulse_start, pulse_end = _get_echo_time(False), _get_echo_time(True)
+    pulse_start, pulse_end = await _get_echo_time(False), await _get_echo_time(True)
     signal_delay = pulse_end - pulse_start
     distance = _compute_distance(signal_delay)
     return int(distance)

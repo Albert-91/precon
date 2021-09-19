@@ -1,3 +1,4 @@
+import asyncio
 import curses
 import time
 from typing import Callable
@@ -21,26 +22,26 @@ def _drive_on_pressed_button(drive_callback: Callable) -> None:
     stop_driving()
 
 
-def _handle_driving_forward() -> None:
-    if get_distance_ahead() > DISTANCE_AHEAD_TO_STOP:
+async def _handle_driving_forward() -> None:
+    if await get_distance_ahead() > DISTANCE_AHEAD_TO_STOP:
         _drive_on_pressed_button(drive_forward)
     else:
         stop_driving()
 
 
-def _handle_driving_backward() -> None:
+async def _handle_driving_backward() -> None:
     _drive_on_pressed_button(drive_backward)
 
 
-def _handle_turning_left() -> None:
+async def _handle_turning_left() -> None:
     _drive_on_pressed_button(turn_left)
 
 
-def _handle_turning_right() -> None:
+async def _handle_turning_right() -> None:
     _drive_on_pressed_button(turn_right)
 
 
-def steer_vehicle(screen) -> None:
+async def steer_vehicle(screen) -> None:
     print("Press key arrows OR 'WSAD' to drive your vehicle")
     print("Press 'q' key quit")
     while True:
@@ -48,13 +49,13 @@ def steer_vehicle(screen) -> None:
         if char == ord('q'):
             break
         elif char == curses.KEY_UP or char == ord('w'):
-            _handle_driving_forward()
+            await _handle_driving_forward()
         elif char == curses.KEY_DOWN or char == ord('s'):
-            _handle_driving_backward()
+            await _handle_driving_backward()
         elif char == curses.KEY_RIGHT or char == ord('d'):
-            _handle_turning_right()
+            await _handle_turning_right()
         elif char == curses.KEY_LEFT or char == ord('a'):
-            _handle_turning_left()
+            await _handle_turning_left()
 
 
 if __name__ == '__main__':
@@ -62,9 +63,11 @@ if __name__ == '__main__':
     curses.noecho()
     curses.cbreak()
     screen.keypad(True)
+    loop = asyncio.get_event_loop()
     try:
-        steer_vehicle(screen)
+        loop.run_until_complete(steer_vehicle(screen))
     finally:
+        loop.close()
         curses.nocbreak()
         screen.keypad(False)
         curses.echo()
