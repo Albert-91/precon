@@ -1,6 +1,5 @@
 import asyncio
 import curses
-import time
 from typing import Callable
 
 from devices_handlers.distance_sensor import get_distance_ahead
@@ -16,29 +15,29 @@ except (RuntimeError, ModuleNotFoundError):
 DISTANCE_AHEAD_TO_STOP = 3
 
 
-def _drive_on_pressed_button(drive_callback: Callable) -> None:
+async def _stop_after_drive(drive_callback: Callable) -> None:
     drive_callback()
-    time.sleep(0.1)
+    await asyncio.sleep(0.1)
     stop_driving()
 
 
 async def _handle_driving_forward() -> None:
     if await get_distance_ahead() > DISTANCE_AHEAD_TO_STOP:
-        _drive_on_pressed_button(drive_forward)
+        await _stop_after_drive(drive_forward)
     else:
         stop_driving()
 
 
 async def _handle_driving_backward() -> None:
-    _drive_on_pressed_button(drive_backward)
+    await _stop_after_drive(drive_backward)
 
 
 async def _handle_turning_left() -> None:
-    _drive_on_pressed_button(turn_left)
+    await _stop_after_drive(turn_left)
 
 
 async def _handle_turning_right() -> None:
-    _drive_on_pressed_button(turn_right)
+    await _stop_after_drive(turn_right)
 
 
 async def steer_vehicle(screen) -> None:
