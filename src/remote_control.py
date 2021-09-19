@@ -66,6 +66,8 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(steer_vehicle(screen))
+    except KeyboardInterrupt:
+        print("Finished remote control")
     finally:
         loop.close()
         curses.nocbreak()
