@@ -67,7 +67,7 @@ if __name__ == '__main__':
     try:
         loop.run_until_complete(steer_vehicle(screen))
     except KeyboardInterrupt:
-        print("Finished remote control")
+        print("Finishing remote control...")
     finally:
         loop.close()
         curses.nocbreak()
