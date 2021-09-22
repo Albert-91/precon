@@ -64,8 +64,9 @@ async def test_drive_forward_on_pressed_keys(mocker, create_screen, key, distanc
     curses.KEY_RIGHT, "d",
 ])
 @pytest.mark.asyncio
-async def test_stop_after_each_drive(mocker, create_screen, key):
-    stop_func = mocker.patch("remote_control.stop_driving")
+async def test_stop_after_each_drive(mocker, create_screen, distance_ahead_to_stop, key):
+    mocker.patch("remote_control.get_distance_ahead", return_value=distance_ahead_to_stop + 1)
+    stop_func = mocker.patch("devices_handlers.driving_engines.stop_driving")
     screen = create_screen(key)
 
     await steer_vehicle(screen)
