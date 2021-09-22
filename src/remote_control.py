@@ -1,10 +1,9 @@
 import asyncio
 import curses
-import time
-from typing import Callable
 
 from devices_handlers.distance_sensor import get_distance_ahead
-from devices_handlers.driving_engines import turn_right, turn_left, drive_backward, stop_driving, drive_forward
+from devices_handlers.driving_engines import turn_right, turn_left, drive_backward, stop_driving, drive_forward, \
+    drive_with_intervals
 
 try:
     import RPi.GPIO as GPIO
@@ -16,29 +15,23 @@ except (RuntimeError, ModuleNotFoundError):
 DISTANCE_AHEAD_TO_STOP = 3
 
 
-def _drive_on_pressed_button(drive_callback: Callable) -> None:
-    drive_callback()
-    time.sleep(0.1)
-    stop_driving()
-
-
 async def _handle_driving_forward() -> None:
     if await get_distance_ahead() > DISTANCE_AHEAD_TO_STOP:
-        _drive_on_pressed_button(drive_forward)
+        drive_with_intervals(drive_forward)
     else:
         stop_driving()
 
 
 async def _handle_driving_backward() -> None:
-    _drive_on_pressed_button(drive_backward)
+    drive_with_intervals(drive_backward)
 
 
 async def _handle_turning_left() -> None:
-    _drive_on_pressed_button(turn_left)
+    drive_with_intervals(turn_left)
 
 
 async def _handle_turning_right() -> None:
-    _drive_on_pressed_button(turn_right)
+    drive_with_intervals(turn_right)
 
 
 async def steer_vehicle(screen) -> None:
