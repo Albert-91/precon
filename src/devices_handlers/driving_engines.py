@@ -1,3 +1,6 @@
+import time
+from typing import Callable
+
 try:
     import RPi.GPIO as GPIO
 except (RuntimeError, ModuleNotFoundError):
@@ -63,3 +66,25 @@ def stop_driving() -> None:
     GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
     GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.LOW)
     GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
+
+
+def drive_with_intervals(drive_callback: Callable, movement_time=0.1) -> None:
+    drive_callback()
+    time.sleep(movement_time)
+    stop_driving()
+
+
+def turn_right_90():
+    pass
+
+
+def turn_right_45():
+    pass
+
+
+def turn_left_90():
+    pass
+
+
+def turn_left_45():
+    pass
