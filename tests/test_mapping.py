@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from mapping import Mapper, Location, DirectionInfo
+from mapping import Mapper, Location, DirectionInfo, NoDirectionFound
 
 
 @pytest.mark.asyncio
@@ -16,3 +16,13 @@ async def test_find_direction_to_move(mocker):
     direction = await mapper.get_direction_to_move()
 
     assert direction == expected_direction
+
+
+@pytest.mark.asyncio
+async def test_find_direction_to_move_with_gathered_empty_list(mocker):
+    mocker.patch("mapping.Mapper.gather_directions_info", return_value=[])
+
+    mapper = Mapper()
+
+    with pytest.raises(NoDirectionFound):
+        await mapper.get_direction_to_move()
