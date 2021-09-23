@@ -46,5 +46,11 @@ class Mapper:
         pass
 
     async def get_direction_to_move(self) -> DirectionInfo:
-        dirs = await self.gather_directions_info()
-        return reduce(lambda a, b: a if a.distance > b.distance else b, dirs)
+        directions = await self.gather_directions_info()
+        if not directions:
+            raise NoDirectionFound
+        return reduce(lambda a, b: a if a.distance > b.distance else b, directions)
+
+
+class NoDirectionFound(Exception):
+    pass
