@@ -74,17 +74,9 @@ def drive_with_intervals(drive_callback: Callable, movement_time=0.1) -> None:
     stop_driving()
 
 
-def turn_right_90():
+def turn_right_on_angle(angle):
     pass
 
 
-def turn_right_45():
-    pass
-
-
-def turn_left_90():
-    pass
-
-
-def turn_left_45():
+def turn_left_on_angle(angle):
     pass
