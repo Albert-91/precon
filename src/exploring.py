@@ -44,7 +44,7 @@ class Localizer:
         self._locations.append(self.current_location)
 
 
-class Mapper:
+class Explorer:
 
     def __init__(self) -> None:
         self._localizer = Localizer()

@@ -1,4 +1,4 @@
-from mapping import Localizer
+from exploring import Localizer
 
 
 def test_updating_current_location():
