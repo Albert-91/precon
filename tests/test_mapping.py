@@ -36,7 +36,7 @@ async def test_quantity_of_gathered_directions_info(mocker):
     mapper = Mapper()
     directions = await mapper.gather_directions_info(directions_number=10)
 
-    assert len(directions) == 10
+    assert len(directions) == 11
 
 
 @pytest.mark.asyncio
@@ -59,20 +59,20 @@ async def test_number_of_measured_distances_during_gathering_directions_info(moc
     mapper = Mapper()
     await mapper.gather_directions_info(directions_number=10)
 
-    assert get_distance_function.call_count == 10
+    assert get_distance_function.call_count == 11
 
 
 @pytest.mark.asyncio
 async def test_values_of_measured_distances_during_gathering_directions_info(mocker):
     NUMBER_OF_DIRECTIONS_TO_CHECK = 10
-    MEASURED_DISTANCES = range(NUMBER_OF_DIRECTIONS_TO_CHECK)
+    measured_distance = range(NUMBER_OF_DIRECTIONS_TO_CHECK+1)
     mocker.patch("mapping.turn_right_on_angle")
-    mocker.patch("mapping.get_distance_ahead", side_effect=MEASURED_DISTANCES)
+    mocker.patch("mapping.get_distance_ahead", side_effect=measured_distance)
 
     mapper = Mapper()
     directions = await mapper.gather_directions_info(directions_number=NUMBER_OF_DIRECTIONS_TO_CHECK)
 
-    for direction, val in zip(directions, MEASURED_DISTANCES):
+    for direction, val in zip(directions, measured_distance):
         assert direction.distance == val
 
 
@@ -103,7 +103,7 @@ async def test_gather_directions_info_last_of_angles_is_less_than_360(mocker):
 
 
 @pytest.mark.asyncio
-async def test_gather_directions_info_always_do_360_degrees(mocker):
+async def test_gather_directions_info_always_fill_to_360_degrees(mocker):
     turning_right_func = mocker.patch("mapping.turn_right_on_angle")
     mocker.patch("mapping.get_distance_ahead")
 

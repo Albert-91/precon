@@ -52,18 +52,23 @@ class Mapper:
     async def gather_directions_info(self, directions_number: int) -> List[DirectionInfo]:
         self._validate_directions_number(directions_number)
         angle_per_rotation = int(360 / directions_number)
-        directions = []
         angle = 0
+        directions = [
+            DirectionInfo(
+                location=Location(*self._localizer.current_location),
+                angle=angle,
+                distance=await get_distance_ahead()
+            )
+        ]
         for _ in range(directions_number):
-            distance = await get_distance_ahead()
+            angle += angle_per_rotation
             directions.append(
                 DirectionInfo(
                     location=Location(*self._localizer.current_location),
                     angle=angle,
-                    distance=distance
+                    distance=await get_distance_ahead()
                 )
             )
-            angle += angle_per_rotation
             turn_right_on_angle(angle_per_rotation)
         turn_right_on_angle(360 - angle)
         return directions
