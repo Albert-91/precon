@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from mapping import Mapper, Location, DirectionInfo, NoDirectionFound
+from exploring import Explorer, Location, DirectionInfo, NoDirectionFound
 
 
 @pytest.mark.asyncio
@@ -12,8 +12,8 @@ async def test_find_direction_to_move(mocker):
     directions.append(expected_direction)
     mocker.patch("mapping.Mapper.gather_directions_info", return_value=directions)
 
-    mapper = Mapper()
-    direction = await mapper.get_direction_to_move()
+    explorer = Explorer()
+    direction = await explorer.get_direction_to_move()
 
     assert direction == expected_direction
 
@@ -22,10 +22,10 @@ async def test_find_direction_to_move(mocker):
 async def test_find_direction_to_move_with_gathered_empty_list(mocker):
     mocker.patch("mapping.Mapper.gather_directions_info", return_value=[])
 
-    mapper = Mapper()
+    explorer = Explorer()
 
     with pytest.raises(NoDirectionFound):
-        await mapper.get_direction_to_move()
+        await explorer.get_direction_to_move()
 
 
 @pytest.mark.asyncio
@@ -33,8 +33,8 @@ async def test_quantity_of_gathered_directions_info(mocker):
     mocker.patch("mapping.turn_right_on_angle")
     mocker.patch("mapping.get_distance_ahead")
 
-    mapper = Mapper()
-    directions = await mapper.gather_directions_info(directions_number=10)
+    explorer = Explorer()
+    directions = await explorer.gather_directions_info(directions_number=10)
 
     assert len(directions) == 11
 
@@ -44,8 +44,8 @@ async def test_types_of_gathered_directions_info(mocker):
     mocker.patch("mapping.turn_right_on_angle")
     mocker.patch("mapping.get_distance_ahead")
 
-    mapper = Mapper()
-    directions = await mapper.gather_directions_info(directions_number=10)
+    explorer = Explorer()
+    directions = await explorer.gather_directions_info(directions_number=10)
 
     for direction in directions:
         assert isinstance(direction, DirectionInfo)
@@ -56,8 +56,8 @@ async def test_number_of_measured_distances_during_gathering_directions_info(moc
     mocker.patch("mapping.turn_right_on_angle")
     get_distance_function = mocker.patch("mapping.get_distance_ahead")
 
-    mapper = Mapper()
-    await mapper.gather_directions_info(directions_number=10)
+    explorer = Explorer()
+    await explorer.gather_directions_info(directions_number=10)
 
     assert get_distance_function.call_count == 11
 
@@ -69,8 +69,8 @@ async def test_values_of_measured_distances_during_gathering_directions_info(moc
     mocker.patch("mapping.turn_right_on_angle")
     mocker.patch("mapping.get_distance_ahead", side_effect=measured_distance)
 
-    mapper = Mapper()
-    directions = await mapper.gather_directions_info(directions_number=NUMBER_OF_DIRECTIONS_TO_CHECK)
+    explorer = Explorer()
+    directions = await explorer.gather_directions_info(directions_number=NUMBER_OF_DIRECTIONS_TO_CHECK)
 
     for direction, val in zip(directions, measured_distance):
         assert direction.distance == val
@@ -83,8 +83,8 @@ async def test_gather_directions_info_number_of_turning_to_measure_distance(mock
     DIRECTIONS_NUMBER = 10
     angle_to_rotate = int(360 / 10)
 
-    mapper = Mapper()
-    await mapper.gather_directions_info(directions_number=DIRECTIONS_NUMBER)
+    explorer = Explorer()
+    await explorer.gather_directions_info(directions_number=DIRECTIONS_NUMBER)
 
     assert turning_right_func.call_count == 11
     for call in turning_right_func.mock_calls:
@@ -96,8 +96,8 @@ async def test_gather_directions_info_last_of_angles_is_less_than_360(mocker):
     mocker.patch("mapping.turn_right_on_angle")
     mocker.patch("mapping.get_distance_ahead")
 
-    mapper = Mapper()
-    directions = await mapper.gather_directions_info(directions_number=10)
+    explorer = Explorer()
+    directions = await explorer.gather_directions_info(directions_number=10)
 
     assert directions[-1].angle <= 360
 
@@ -107,8 +107,8 @@ async def test_gather_directions_info_always_fill_to_360_degrees(mocker):
     turning_right_func = mocker.patch("mapping.turn_right_on_angle")
     mocker.patch("mapping.get_distance_ahead")
 
-    mapper = Mapper()
-    directions = await mapper.gather_directions_info(directions_number=11)
+    explorer = Explorer()
+    directions = await explorer.gather_directions_info(directions_number=11)
     angle_to_do_360 = 360 - directions[-1].angle
 
     turning_right_func.assert_called_with(angle_to_do_360)
@@ -128,7 +128,7 @@ async def test_gather_directions_info_bad_input(mocker, directions_number):
     mocker.patch("mapping.turn_right_on_angle")
     mocker.patch("mapping.get_distance_ahead")
 
-    mapper = Mapper()
+    explorer = Explorer()
 
     with pytest.raises(ValueError):
-        await mapper.gather_directions_info(directions_number=directions_number)
+        await explorer.gather_directions_info(directions_number=directions_number)
