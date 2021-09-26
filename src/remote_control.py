@@ -41,14 +41,23 @@ async def steer_vehicle(screen) -> None:
         char = screen.getch()
         if char == ord('q'):
             break
-        elif char == curses.KEY_UP or char == ord('w'):
-            await _handle_driving_forward()
-        elif char == curses.KEY_DOWN or char == ord('s'):
-            await _handle_driving_backward()
-        elif char == curses.KEY_RIGHT or char == ord('d'):
-            await _handle_turning_right()
-        elif char == curses.KEY_LEFT or char == ord('a'):
-            await _handle_turning_left()
+        handlers = {
+            curses.KEY_UP: _handle_driving_forward,
+            ord('w'): _handle_driving_forward,
+
+            curses.KEY_DOWN: _handle_driving_backward,
+            ord('s'): _handle_driving_backward,
+
+            curses.KEY_LEFT: _handle_turning_left,
+            ord('a'): _handle_turning_left,
+
+            curses.KEY_RIGHT: _handle_turning_right,
+            ord('d'): _handle_turning_right,
+        }
+        driving_handler = handlers.get(char)
+
+        if driving_handler:
+            await driving_handler()
 
 
 if __name__ == '__main__':
