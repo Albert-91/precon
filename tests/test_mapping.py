@@ -29,7 +29,7 @@ async def test_map_locations_from_directions_info(mocker, direction_info, expect
     mocker.patch("mapping.Explorer.gather_directions_info", return_value=direction_info)
 
     mapper = Mapper()
-    await mapper.map_locations()
+    await mapper.map_obstacles()
 
     assert mapper.obstacles == expected_result
 
@@ -52,7 +52,7 @@ async def test_map_locations_exclude_distances_which_sensor_does_not_handle(mock
     ]
 
     mapper = Mapper()
-    await mapper.map_locations()
+    await mapper.map_obstacles()
 
     assert len(mapper.obstacles) == 2
     assert mapper.obstacles == expected_result
