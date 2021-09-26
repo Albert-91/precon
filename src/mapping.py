@@ -16,6 +16,8 @@ class ObstacleLocation:
 class Mapper:
     """Mapper keeps all mapped locations and knows which areas are undiscovered."""
 
+    MAXIMUM_DISTANCE_TO_SET_OBSTACLE = 2000
+
     def __init__(self):
         self._obstacles: List[ObstacleLocation] = []
         self._explorer = Explorer()
@@ -26,6 +28,7 @@ class Mapper:
 
     async def map_locations(self) -> None:
         directions = await self._explorer.gather_directions_info(DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK)
+        directions = filter(lambda x: x.distance <= self.MAXIMUM_DISTANCE_TO_SET_OBSTACLE, directions)
         for direction in directions:
             location = self._compute_obstacle_coordinates(direction)
             self._obstacles.append(location)
@@ -34,7 +37,7 @@ class Mapper:
     def _compute_obstacle_coordinates(direction: DirectionInfo) -> ObstacleLocation:
         def round_half_up(n, decimals=0):
             multiplier = 10 ** decimals
-            return math.floor(n*multiplier + 0.5) / multiplier
+            return math.floor(n * multiplier + 0.5) / multiplier
 
         y = direction.location.y + direction.distance * math.cos(math.radians(direction.angle))
         x = direction.location.x + direction.distance * math.sin(math.radians(direction.angle))
