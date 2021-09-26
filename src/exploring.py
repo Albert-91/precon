@@ -45,6 +45,8 @@ class Localizer:
 
 
 class Explorer:
+    """Explorer knows current location and takes information which areas has to be discovered.
+    He decides which area will be discovered as first."""
 
     def __init__(self) -> None:
         self._localizer = Localizer()
