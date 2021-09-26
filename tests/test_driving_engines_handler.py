@@ -23,12 +23,18 @@ def left_engine_backward_pin():
     return 15
 
 
+@pytest.fixture()
+def patch_time(mocker):
+    mocker.patch("devices_handlers.driving_engines.time")
+
+
 def test_driving_forward(
     mocker,
     right_engine_forward_pin,
     right_engine_backward_pin,
     left_engine_forward_pin,
     left_engine_backward_pin,
+    patch_time
 ):
     output = mocker.patch("devices_handlers.driving_engines.fake_rpi.RPi.GPIO.output")
 
@@ -46,6 +52,7 @@ def test_driving_backward(
     right_engine_backward_pin,
     left_engine_forward_pin,
     left_engine_backward_pin,
+    patch_time
 ):
     output = mocker.patch("devices_handlers.driving_engines.fake_rpi.RPi.GPIO.output")
 
@@ -63,6 +70,7 @@ def test_turning_right(
     right_engine_backward_pin,
     left_engine_forward_pin,
     left_engine_backward_pin,
+    patch_time
 ):
     output = mocker.patch("devices_handlers.driving_engines.fake_rpi.RPi.GPIO.output")
 
@@ -80,6 +88,7 @@ def test_turning_left(
     right_engine_backward_pin,
     left_engine_forward_pin,
     left_engine_backward_pin,
+    patch_time
 ):
     output = mocker.patch("devices_handlers.driving_engines.fake_rpi.RPi.GPIO.output")
 
@@ -97,6 +106,7 @@ def test_stop_drives(
     right_engine_backward_pin,
     left_engine_forward_pin,
     left_engine_backward_pin,
+    patch_time
 ):
     output = mocker.patch("devices_handlers.driving_engines.fake_rpi.RPi.GPIO.output")
 
