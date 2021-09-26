@@ -41,21 +41,33 @@ def _drive_left_engine_backward() -> None:
     GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.HIGH)
 
 
+def drive_with_intervals(drive_callback: Callable, movement_time=0.1) -> Callable:
+    def inner():
+        drive_callback()
+        time.sleep(movement_time)
+        stop_driving()
+    return inner
+
+
+@drive_with_intervals
 def drive_forward() -> None:
     _drive_left_engine_forward()
     _drive_right_engine_forward()
 
 
+@drive_with_intervals
 def drive_backward() -> None:
     _drive_left_engine_backward()
     _drive_right_engine_backward()
 
 
+@drive_with_intervals
 def turn_right() -> None:
     _drive_left_engine_backward()
     _drive_right_engine_forward()
 
 
+@drive_with_intervals
 def turn_left() -> None:
     _drive_left_engine_forward()
     _drive_right_engine_backward()
@@ -66,12 +78,6 @@ def stop_driving() -> None:
     GPIO.output(RIGHT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
     GPIO.output(LEFT_ENGINE_FORWARD_PIN_IDX, GPIO.LOW)
     GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
-
-
-def drive_with_intervals(drive_callback: Callable, movement_time=0.1) -> None:
-    drive_callback()
-    time.sleep(movement_time)
-    stop_driving()
 
 
 def turn_right_on_angle(angle):

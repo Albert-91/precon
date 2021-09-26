@@ -2,8 +2,7 @@ import asyncio
 import curses
 
 from devices_handlers.distance_sensor import get_distance_ahead
-from devices_handlers.driving_engines import turn_right, turn_left, drive_backward, stop_driving, drive_forward, \
-    drive_with_intervals
+from devices_handlers.driving_engines import turn_right, turn_left, drive_backward, stop_driving, drive_forward
 
 try:
     import RPi.GPIO as GPIO
@@ -17,21 +16,21 @@ DISTANCE_AHEAD_TO_STOP = 3
 
 async def _handle_driving_forward() -> None:
     if await get_distance_ahead() > DISTANCE_AHEAD_TO_STOP:
-        drive_with_intervals(drive_forward)
+        drive_forward()
     else:
         stop_driving()
 
 
 async def _handle_driving_backward() -> None:
-    drive_with_intervals(drive_backward)
+    drive_backward()
 
 
 async def _handle_turning_left() -> None:
-    drive_with_intervals(turn_left)
+    turn_left()
 
 
 async def _handle_turning_right() -> None:
-    drive_with_intervals(turn_right)
+    turn_right()
 
 
 async def steer_vehicle(screen) -> None:
