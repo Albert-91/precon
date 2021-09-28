@@ -20,14 +20,12 @@ class Mapper:
 
     def __init__(self):
         self._obstacles: List[ObstacleLocation] = []
-        self._explorer = Explorer()
 
     @property
     def obstacles(self) -> List[ObstacleLocation]:
         return self._obstacles
 
-    async def map_obstacles(self) -> None:
-        directions = await self._explorer.gather_directions_info(DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK)
+    async def map_obstacles(self, directions: List[DirectionInfo]) -> None:
         directions = filter(lambda x: x.distance <= self.MAXIMUM_DISTANCE_TO_SET_OBSTACLE, directions)
         for direction in directions:
             location = self._compute_obstacle_coordinates(direction)
