@@ -114,6 +114,17 @@ async def test_scan_area_always_fill_to_360_degrees(mocker):
     turning_right_func.assert_called_with(angle_to_do_360)
 
 
+@pytest.mark.asyncio
+async def test_scan_area_map_all_directions(mocker):
+    map_obstacles_method = mocker.patch("exploring.Mapper.map_obstacles")
+    mocker.patch("exploring.get_distance_ahead", return_value=1)
+
+    explorer = Explorer()
+    directions = await explorer.scan_area(directions_number=11)
+
+    map_obstacles_method.assert_called_once_with(directions)
+
+
 @pytest.mark.parametrize("directions_number", [
     0,
     500,

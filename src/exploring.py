@@ -112,6 +112,7 @@ class Explorer:
             )
             turn_right_on_angle(angle_per_rotation)
         turn_right_on_angle(360 - angle)
+        await self._mapper.map_obstacles(directions)
         return directions
 
     async def get_direction_to_move(self) -> DirectionInfo:
