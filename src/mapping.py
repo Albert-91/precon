@@ -35,10 +35,10 @@ class Mapper:
 
     @staticmethod
     def _compute_obstacle_coordinates(direction: DirectionInfo) -> ObstacleLocation:
-        def round_half_up(n, decimals=0):
+        def round_half_up(n: float, decimals: int = 0) -> float:
             multiplier = 10 ** decimals
             return math.floor(n * multiplier + 0.5) / multiplier
 
         y = direction.location.y + direction.distance * math.cos(math.radians(direction.angle))
         x = direction.location.x + direction.distance * math.sin(math.radians(direction.angle))
-        return ObstacleLocation(round_half_up(x), round_half_up(y))
+        return ObstacleLocation(int(round_half_up(x)), int(round_half_up(y)))
