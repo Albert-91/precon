@@ -9,7 +9,6 @@ from devices_handlers.driving_engines import turn_right_on_angle
 
 
 DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK = 10
-MAXIMUM_NUMBER_OF_DIRECTIONS = 20
 
 
 @dataclass(frozen=True)
@@ -29,7 +28,6 @@ class DirectionInfo:
 class ObstacleLocation:
     x: int
     y: int
-
 
 
 class Localizer:
@@ -86,6 +84,8 @@ class Explorer:
     """Explorer knows current location and takes information which areas has to be discovered.
     He decides which area will be discovered as first."""
 
+    MAXIMUM_NUMBER_OF_DIRECTIONS = 20
+
     def __init__(self) -> None:
         self._localizer = Localizer()
         self._mapper = Mapper()
@@ -124,7 +124,7 @@ class Explorer:
     def _validate_directions_number(self, directions_number) -> None:
         if not isinstance(directions_number, int) \
             or directions_number <= 1 \
-            or directions_number > MAXIMUM_NUMBER_OF_DIRECTIONS:
+            or directions_number > self.MAXIMUM_NUMBER_OF_DIRECTIONS:
             raise ValueError
 
 
