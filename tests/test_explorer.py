@@ -1,4 +1,4 @@
-from unittest.mock import Mock
+from unittest.mock import Mock, PropertyMock
 
 import pytest
 
@@ -127,7 +127,6 @@ async def test_scan_area_map_all_directions(mocker):
 
 @pytest.mark.parametrize("directions_number", [
     0,
-    500,
     -50,
     1.1,
     None,
@@ -143,3 +142,16 @@ async def test_scan_area_bad_input(mocker, directions_number):
 
     with pytest.raises(ValueError):
         await explorer.scan_area(directions_number=directions_number)
+
+
+@pytest.mark.asyncio
+async def test_scan_area_set_direction_number_grater_than_maximum(mocker):
+    mocker.patch("exploring.turn_right_on_angle")
+    mocker.patch("exploring.get_distance_ahead")
+    MAXIMUM_NUMBER_OF_DIRECTIONS = 10
+    mocker.patch.object(Explorer, "MAXIMUM_NUMBER_OF_DIRECTIONS", return_value=MAXIMUM_NUMBER_OF_DIRECTIONS, new_callable=PropertyMock)
+
+    explorer = Explorer()
+
+    with pytest.raises(ValueError):
+        await explorer.scan_area(directions_number=MAXIMUM_NUMBER_OF_DIRECTIONS + 1)
