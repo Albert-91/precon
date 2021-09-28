@@ -90,7 +90,11 @@ class Explorer:
         self._localizer = Localizer()
         self._mapper = Mapper()
 
-    async def scan_area(self, directions_number: int) -> List[DirectionInfo]:
+    async def explore_undiscovered_area(self):
+        if not self._mapper.obstacles:
+            await self.scan_area()
+
+    async def scan_area(self, directions_number: int = DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK) -> List[DirectionInfo]:
         self._validate_directions_number(directions_number)
         angle_per_rotation = int(360 / directions_number)
         angle = 0
@@ -116,7 +120,7 @@ class Explorer:
         return directions
 
     async def get_direction_to_move(self) -> DirectionInfo:
-        directions = await self.scan_area(DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK)
+        directions = await self.scan_area()
         if not directions:
             raise NoDirectionFound
         return reduce(lambda a, b: a if a.distance > b.distance else b, directions)
