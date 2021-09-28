@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from functools import reduce
 from typing import List, Tuple
+import math
+
 
 from devices_handlers.distance_sensor import get_distance_ahead
 from devices_handlers.driving_engines import turn_right_on_angle
@@ -21,6 +23,13 @@ class DirectionInfo:
     location: Location
     angle: int
     distance: int
+
+
+@dataclass(frozen=True)
+class ObstacleLocation:
+    x: int
+    y: int
+
 
 
 class Localizer:
@@ -44,14 +53,44 @@ class Localizer:
         self._locations.append(self.current_location)
 
 
+class Mapper:
+    """Mapper keeps all mapped locations and knows which areas are undiscovered."""
+
+    MAXIMUM_DISTANCE_TO_SET_OBSTACLE = 2000
+
+    def __init__(self):
+        self._obstacles: List[ObstacleLocation] = []
+
+    @property
+    def obstacles(self) -> List[ObstacleLocation]:
+        return self._obstacles
+
+    async def map_obstacles(self, directions: List[DirectionInfo]) -> None:
+        directions = filter(lambda x: x.distance <= self.MAXIMUM_DISTANCE_TO_SET_OBSTACLE, directions)
+        for direction in directions:
+            location = self._compute_obstacle_coordinates(direction)
+            self._obstacles.append(location)
+
+    @staticmethod
+    def _compute_obstacle_coordinates(direction: DirectionInfo) -> ObstacleLocation:
+        def round_half_up(n: float, decimals: int = 0) -> float:
+            multiplier = 10 ** decimals
+            return math.floor(n * multiplier + 0.5) / multiplier
+
+        y = direction.location.y + direction.distance * math.cos(math.radians(direction.angle))
+        x = direction.location.x + direction.distance * math.sin(math.radians(direction.angle))
+        return ObstacleLocation(int(round_half_up(x)), int(round_half_up(y)))
+
+
 class Explorer:
     """Explorer knows current location and takes information which areas has to be discovered.
     He decides which area will be discovered as first."""
 
     def __init__(self) -> None:
         self._localizer = Localizer()
+        self._mapper = Mapper()
 
-    async def gather_directions_info(self, directions_number: int) -> List[DirectionInfo]:
+    async def scan_area(self, directions_number: int) -> List[DirectionInfo]:
         self._validate_directions_number(directions_number)
         angle_per_rotation = int(360 / directions_number)
         angle = 0
@@ -76,7 +115,7 @@ class Explorer:
         return directions
 
     async def get_direction_to_move(self) -> DirectionInfo:
-        directions = await self.gather_directions_info(DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK)
+        directions = await self.scan_area(DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK)
         if not directions:
             raise NoDirectionFound
         return reduce(lambda a, b: a if a.distance > b.distance else b, directions)
