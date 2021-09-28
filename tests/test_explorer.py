@@ -139,7 +139,6 @@ async def test_scan_area_bad_input(mocker, directions_number):
     mocker.patch("exploring.get_distance_ahead")
 
     explorer = Explorer()
-
     with pytest.raises(ValueError):
         await explorer.scan_area(directions_number=directions_number)
 
@@ -152,6 +151,5 @@ async def test_scan_area_set_direction_number_grater_than_maximum(mocker):
     mocker.patch.object(Explorer, "MAXIMUM_NUMBER_OF_DIRECTIONS", return_value=MAXIMUM_NUMBER_OF_DIRECTIONS, new_callable=PropertyMock)
 
     explorer = Explorer()
-
     with pytest.raises(ValueError):
         await explorer.scan_area(directions_number=MAXIMUM_NUMBER_OF_DIRECTIONS + 1)
