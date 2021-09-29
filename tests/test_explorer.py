@@ -181,6 +181,19 @@ async def test_explore_undiscovered_area__scan_area_when_there_is_no_mapped_obst
 
 
 @pytest.mark.asyncio
+async def test_explore_undiscovered_area__with_already_scanned_obstacles(mocker):
+    mocker.patch.object(Mapper, "obstacles",
+                        return_value=[ObstacleLocation(Mock(), Mock())], new_callable=PropertyMock)
+    scan_area_method = mocker.patch("exploring.Explorer.scan_area")
+
+    localizer = Localizer()
+    explorer = Explorer(localizer)
+    await explorer.explore_undiscovered_area()
+
+    scan_area_method.assert_called_once()
+
+
+@pytest.mark.asyncio
 async def test_moving_forward_and_updating_location():
     localizer = Localizer()
     explorer = Explorer(localizer)
