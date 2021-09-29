@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 from functools import reduce
 from typing import List, Tuple
@@ -6,6 +7,9 @@ import math
 
 from devices_handlers.distance_sensor import get_distance_ahead
 from devices_handlers.driving_engines import turn_right_on_angle, drive_forward_on_units, drive_backward_on_units
+
+logger = logging.getLogger(__name__)
+
 
 DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK = 10
 
@@ -53,6 +57,7 @@ class Localizer:
         self._x += x
         self._y += y
         self._angle += angle
+        logger.debug(f"Set x = {self._x}, y = {self._y}, angle={self._angle}")
         self._locations.append(self.current_location)
 
 
@@ -73,6 +78,7 @@ class Mapper:
         for direction in directions:
             location = self._compute_obstacle_coordinates(direction)
             self._obstacles.append(location)
+            logger.debug(f"Added new obstacle's location: {location}")
 
     @staticmethod
     def _compute_obstacle_coordinates(direction: DirectionInfo) -> ObstacleLocation:
