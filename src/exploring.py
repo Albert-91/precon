@@ -102,7 +102,9 @@ class Explorer:
         self._mapper = Mapper()
 
     async def explore_undiscovered_area(self):
-        if not self._mapper.obstacles:
+        await self.scan_area()
+        while not self._mapper.obstacles:
+            self.move_forward()
             await self.scan_area()
 
     async def scan_area(self, directions_number: int = DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK) -> List[DirectionInfo]:

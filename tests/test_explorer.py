@@ -2,7 +2,7 @@ from unittest.mock import Mock, PropertyMock
 
 import pytest
 
-from exploring import Explorer, Location, DirectionInfo, NoDirectionFound, Mapper, Localizer
+from exploring import Explorer, Location, DirectionInfo, NoDirectionFound, Mapper, Localizer, ObstacleLocation
 
 
 @pytest.mark.asyncio
@@ -169,14 +169,15 @@ async def test_scan_area_set_direction_number_grater_than_maximum(mocker):
 
 @pytest.mark.asyncio
 async def test_explore_undiscovered_area__scan_area_when_there_is_no_mapped_obstacles(mocker):
-    mocker.patch.object(Mapper, "obstacles", return_value=[], new_callable=PropertyMock)
+    mocker.patch.object(Mapper, "obstacles",
+                        side_effect=[[], [], [ObstacleLocation(Mock(), Mock())]], new_callable=PropertyMock)
     scan_area_method = mocker.patch("exploring.Explorer.scan_area")
 
     localizer = Localizer()
     explorer = Explorer(localizer)
     await explorer.explore_undiscovered_area()
 
-    scan_area_method.assert_called()
+    assert scan_area_method.call_count == 3
 
 
 @pytest.mark.asyncio
