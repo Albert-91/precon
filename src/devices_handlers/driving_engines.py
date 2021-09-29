@@ -86,3 +86,11 @@ def turn_right_on_angle(angle):
 
 def turn_left_on_angle(angle):
     pass
+
+
+def drive_forward_on_units(unit: int = 1):
+    pass
+
+
+def drive_backward_on_units(unit: int = 1):
+    pass

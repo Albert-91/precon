@@ -177,3 +177,21 @@ async def test_explore_undiscovered_area__scan_area_when_there_is_no_mapped_obst
     await explorer.explore_undiscovered_area()
 
     scan_area_method.assert_called()
+
+
+@pytest.mark.asyncio
+async def test_moving_forward_and_updating_location():
+    localizer = Localizer()
+    explorer = Explorer(localizer)
+    explorer.move_forward(unit=1)
+
+    assert localizer.current_location == (0, 1)
+
+
+@pytest.mark.asyncio
+async def test_moving_backward_and_updating_location():
+    localizer = Localizer()
+    explorer = Explorer(localizer)
+    explorer.move_backward(unit=1)
+
+    assert localizer.current_location == (0, -1)
