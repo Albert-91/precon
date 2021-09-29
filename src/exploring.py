@@ -5,8 +5,7 @@ import math
 
 
 from devices_handlers.distance_sensor import get_distance_ahead
-from devices_handlers.driving_engines import turn_right_on_angle
-
+from devices_handlers.driving_engines import turn_right_on_angle, drive_forward_on_units
 
 DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK = 10
 
@@ -86,8 +85,8 @@ class Explorer:
 
     MAXIMUM_NUMBER_OF_DIRECTIONS = 20
 
-    def __init__(self) -> None:
-        self._localizer = Localizer()
+    def __init__(self, localizer) -> None:
+        self._localizer = localizer
         self._mapper = Mapper()
 
     async def explore_undiscovered_area(self):
