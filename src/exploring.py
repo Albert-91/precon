@@ -16,8 +16,8 @@ DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK = 10
 
 @dataclass(frozen=True)
 class Location:
-    x: int
-    y: int
+    x: float
+    y: float
 
 
 @dataclass(frozen=True)
@@ -35,14 +35,14 @@ class ObstacleLocation:
 
 class Localizer:
 
-    def __init__(self, x: int = 0, y: int = 0, angle: int = 0) -> None:
+    def __init__(self, x: float = 0, y: float = 0, angle: int = 0) -> None:
         self._x = x
         self._y = y
         self._angle = angle
         self._locations: List = [self.current_location]
 
     @property
-    def current_location(self) -> Tuple[int, int]:
+    def current_location(self) -> Tuple[float, float]:
         return self._x, self._y
 
     @property
@@ -53,9 +53,9 @@ class Localizer:
     def all_locations(self) -> List[Tuple[int, int]]:
         return self._locations
 
-    def update(self, x, y, angle=0) -> None:
-        self._x += x
-        self._y += y
+    def update(self, movement, angle=0) -> None:
+        self._y = round(self._y + movement * math.cos(math.radians(angle)), 3)
+        self._x = round(self._x + movement * math.sin(math.radians(angle)), 3)
         self._angle += angle
         logger.debug(f"Set x = {self._x}, y = {self._y}, angle={self._angle}")
         self._locations.append(self.current_location)
@@ -132,11 +132,11 @@ class Explorer:
 
     def move_forward(self, unit: int = 1) -> None:
         drive_forward_on_units(unit=unit)
-        self._localizer.update(0, unit)
+        self._localizer.update(unit)
 
     def move_backward(self, unit: int = 1) -> None:
         drive_backward_on_units(unit=unit)
-        self._localizer.update(0, -unit)
+        self._localizer.update(-unit)
 
     async def get_direction_to_move(self) -> DirectionInfo:
         directions = await self.scan_area()
