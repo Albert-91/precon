@@ -5,7 +5,7 @@ import math
 
 
 from devices_handlers.distance_sensor import get_distance_ahead
-from devices_handlers.driving_engines import turn_right_on_angle, drive_forward_on_units
+from devices_handlers.driving_engines import turn_right_on_angle, drive_forward_on_units, drive_backward_on_units
 
 DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK = 10
 
@@ -117,6 +117,14 @@ class Explorer:
         turn_right_on_angle(360 - angle)
         await self._mapper.map_obstacles(directions)
         return directions
+
+    def move_forward(self, unit: int = 1) -> None:
+        drive_forward_on_units(unit=unit)
+        self._localizer.update(0, unit)
+
+    def move_backward(self, unit: int = 1) -> None:
+        drive_backward_on_units(unit=unit)
+        self._localizer.update(0, -unit)
 
     async def get_direction_to_move(self) -> DirectionInfo:
         directions = await self.scan_area()
