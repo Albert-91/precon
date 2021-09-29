@@ -175,7 +175,7 @@ async def test_explore_undiscovered_area__scan_area_when_there_is_no_mapped_obst
 
     localizer = Localizer()
     explorer = Explorer(localizer)
-    await explorer.explore_undiscovered_area()
+    await explorer.run()
 
     assert scan_area_method.call_count == 3
 
@@ -188,7 +188,7 @@ async def test_explore_undiscovered_area__with_already_scanned_obstacles(mocker)
 
     localizer = Localizer()
     explorer = Explorer(localizer)
-    await explorer.explore_undiscovered_area()
+    await explorer.run()
 
     scan_area_method.assert_called_once()
 
