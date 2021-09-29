@@ -2,11 +2,21 @@ from exploring import Localizer
 
 
 def test_updating_current_location():
-    localizator = Localizer(x=0, y=0)
+    localizator = Localizer(x=0, y=0, angle=0)
 
-    localizator.update(1, 0)
+    localizator.update(x=1, y=0, angle=0)
 
     assert localizator.current_location == (1, 0)
+    assert localizator.current_angle == 0
+
+
+def test_updating_current_angle():
+    localizator = Localizer(x=0, y=0, angle=0)
+
+    localizator.update(x=0, y=0, angle=10)
+
+    assert localizator.current_location == (0, 0)
+    assert localizator.current_angle == 10
 
 
 def test_all_locations_with_updated_x():
