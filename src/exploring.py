@@ -31,9 +31,10 @@ class ObstacleLocation:
 
 class Localizer:
 
-    def __init__(self, x: int = 0, y: int = 0) -> None:
+    def __init__(self, x: int = 0, y: int = 0, angle: int = 0) -> None:
         self._x = x
         self._y = y
+        self._angle = angle
         self._locations: List = [self.current_location]
 
     @property
@@ -41,12 +42,17 @@ class Localizer:
         return self._x, self._y
 
     @property
+    def current_angle(self) -> int:
+        return self._angle
+
+    @property
     def all_locations(self) -> List[Tuple[int, int]]:
         return self._locations
 
-    def update(self, x, y) -> None:
+    def update(self, x, y, angle=0) -> None:
         self._x += x
         self._y += y
+        self._angle += angle
         self._locations.append(self.current_location)
 
 
