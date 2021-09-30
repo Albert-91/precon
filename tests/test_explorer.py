@@ -111,6 +111,21 @@ async def test_scan_area_last_of_angles_is_less_than_360(mocker):
 
 
 @pytest.mark.asyncio
+async def test_scan_area__saved_angles_are_relative_to_current_angle(mocker):
+    mocker.patch("exploring.turn_right_on_angle")
+    mocker.patch("exploring.get_distance_ahead", return_value=1)
+
+    localizer = Localizer(angle=10)
+    explorer = Explorer(localizer)
+    assert localizer.current_angle == 10
+    directions = await explorer.scan_area(directions_number=2)
+
+    assert directions[0].angle == 10
+    assert directions[1].angle == 190
+    assert directions[2].angle == 370
+
+
+@pytest.mark.asyncio
 async def test_scan_area_always_fill_to_360_degrees(mocker):
     turning_right_func = mocker.patch("exploring.turn_right_on_angle")
     mocker.patch("exploring.get_distance_ahead", return_value=1)
