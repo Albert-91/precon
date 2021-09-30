@@ -110,7 +110,7 @@ class Explorer:
     async def scan_area(self, directions_number: int = DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK) -> List[DirectionInfo]:
         self._validate_directions_number(directions_number)
         angle_per_rotation = int(360 / directions_number)
-        angle = 0
+        angle = self._localizer.current_angle
         directions = [
             DirectionInfo(
                 location=Location(*self._localizer.current_location),
