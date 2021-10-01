@@ -33,6 +33,12 @@ class ObstacleLocation:
     y: int
 
 
+@dataclass(frozen=True)
+class UndiscoveredRegion:
+    x: float
+    y: float
+
+
 class Localizer:
 
     def __init__(self, x: float = 0, y: float = 0, angle: int = 0) -> None:
@@ -62,7 +68,7 @@ class Localizer:
 
 
 class Mapper:
-    """Mapper keeps all mapped locations and knows which areas are undiscovered."""
+    """Mapper keeps all mapped locations."""
 
     MAXIMUM_DISTANCE_TO_SET_OBSTACLE = 2000
 
@@ -91,6 +97,20 @@ class Mapper:
         return ObstacleLocation(int(round_half_up(x)), int(round_half_up(y)))
 
 
+class PathPlanner:
+
+    def __init__(self):
+        self._undiscovered_regions: List[UndiscoveredRegion] = []
+
+    @property
+    def undiscovered_regions(self) -> List[UndiscoveredRegion]:
+        return self._undiscovered_regions
+
+    def compute_undiscovered_location(self):
+        self._undiscovered_regions.append(UndiscoveredRegion(x=0, y=0))
+        self._undiscovered_regions.append(UndiscoveredRegion(x=3, y=0))
+
+
 class Explorer:
     """Explorer knows current location and takes information which areas has to be discovered.
     He decides which area will be discovered as first."""
@@ -106,6 +126,10 @@ class Explorer:
         while not self._mapper.obstacles:
             self.move_forward(unit=100)
             await self.scan_area()
+        # while self._path_planner.locations_to_explore:
+        #     destination = self._path_planner.get_closest_location()
+        #     self.go_to_location(start=self.current_location, dest=self.locations_to_explore[0])
+        #     await self.scan_area()
 
     async def scan_area(self, directions_number: int = DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK) -> List[DirectionInfo]:
         self._validate_directions_number(directions_number)
