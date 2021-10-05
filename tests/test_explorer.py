@@ -208,8 +208,7 @@ async def test_explore_undiscovered_area__with_already_scanned_obstacles(mocker)
     scan_area_method.assert_called_once()
 
 
-@pytest.mark.asyncio
-async def test_moving_forward_and_updating_location():
+def test_moving_forward_and_updating_location():
     localizer = Localizer()
     explorer = Explorer(localizer)
     explorer.move_forward(unit=1)
@@ -217,8 +216,7 @@ async def test_moving_forward_and_updating_location():
     assert localizer.current_location == (0, 1)
 
 
-@pytest.mark.asyncio
-async def test_moving_backward_and_updating_location():
+def test_moving_backward_and_updating_location():
     localizer = Localizer()
     explorer = Explorer(localizer)
     explorer.move_backward(unit=1)

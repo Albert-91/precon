@@ -135,10 +135,6 @@ class Explorer:
         while not self._mapper.obstacles:
             self.move_forward(unit=100)
             await self.scan_area()
-        # while self._path_planner.locations_to_explore:
-        #     destination = self._path_planner.get_closest_location()
-        #     self.go_to_location(start=self.current_location, dest=self.locations_to_explore[0])
-        #     await self.scan_area()
 
     async def scan_area(self, directions_number: int = DEFAULT_NUMBER_OF_DIRECTIONS_TO_CHECK) -> List[DirectionInfo]:
         self._validate_directions_number(directions_number)
