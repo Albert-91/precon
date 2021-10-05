@@ -4,7 +4,6 @@ from functools import reduce
 from typing import List, Tuple
 import math
 
-
 from devices_handlers.distance_sensor import get_distance_ahead
 from devices_handlers.driving_engines import turn_right_on_angle, drive_forward_on_units, drive_backward_on_units
 
@@ -99,16 +98,26 @@ class Mapper:
 
 class PathPlanner:
 
-    def __init__(self):
+    def __init__(self, mapper: Mapper) -> None:
+        self._mapper: Mapper = mapper
         self._undiscovered_regions: List[UndiscoveredRegion] = []
 
     @property
     def undiscovered_regions(self) -> List[UndiscoveredRegion]:
         return self._undiscovered_regions
 
-    def compute_undiscovered_location(self):
-        self._undiscovered_regions.append(UndiscoveredRegion(x=0, y=0))
-        self._undiscovered_regions.append(UndiscoveredRegion(x=3, y=0))
+    async def compute_undiscovered_location(self) -> None:
+        def count_neighbours_in_radius(point: ObstacleLocation, nodes: List[ObstacleLocation], radius: int = 2) -> int:
+            result = []
+            for node in nodes:
+                if (point.x - node.x) ** 2 + (point.y - node.y) ** 2 <= radius and not point == node:
+                    result.append(node)
+            return len(result)
+
+        for location in self._mapper.obstacles:
+            neighbours_number = count_neighbours_in_radius(location, self._mapper.obstacles)
+            if neighbours_number < 2:
+                self._undiscovered_regions.append(UndiscoveredRegion(location.x, location.y))
 
 
 class Explorer:
