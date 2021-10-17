@@ -39,15 +39,15 @@ def get_x_rotation(x, y, z):
 
 
 def pitch(a_x, a_y, a_z):
-    return math.degrees(180 * math.atan(a_x / dist(a_y, a_z)) / math.pi)
+    return math.degrees(math.atan2(a_x, dist(a_y, a_z)))
 
 
 def roll(a_x, a_y, a_z):
-    return math.degrees(180 * math.atan(a_y / dist(a_x, a_z)) / math.pi)
+    return math.degrees(math.atan2(a_y, dist(a_x, a_z)))
 
 
 def yaw(a_x, a_y, a_z):
-    return math.degrees(180 * math.atan(a_z / dist(a_x, a_z)) / math.pi)
+    return math.degrees(math.atan2(a_z, dist(a_x, a_z)))
 
 
 bus = smbus2.SMBus(1)
@@ -59,9 +59,9 @@ while True:
 
     print("------------------")
 
-    accel_zout = read_word_2c(0x3b)
-    accel_yout = read_word_2c(0x3d)
-    accel_xout = read_word_2c(0x3f)
+    accel_xout = read_word_2c(0x3b)
+    accel_zout = read_word_2c(0x3d)
+    accel_yout = read_word_2c(0x3f)
 
     accel_xout_scaled = accel_xout / 16384.0
     accel_yout_scaled = accel_yout / 16384.0
