@@ -59,9 +59,9 @@ while True:
 
     print("------------------")
 
-    accel_xout = read_word_2c(0x3b)
+    accel_zout = read_word_2c(0x3b)
     accel_yout = read_word_2c(0x3d)
-    accel_zout = read_word_2c(0x3f)
+    accel_xout = read_word_2c(0x3f)
 
     accel_xout_scaled = accel_xout / 16384.0
     accel_yout_scaled = accel_yout / 16384.0
