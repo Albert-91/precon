@@ -64,21 +64,30 @@ bus = smbus2.SMBus(1)
 address = 0x68
 
 bus.write_byte_data(address, power_mgmt_1, 0)
+import ctypes
+
+class C:
+    MPU6050_RA_GYRO_XOUT_H = 0x43
+    MPU6050_ADDRESS_AD0_LOW = 0x68  # address pin low (GND), default
+    MPU6050_ADDRESS_AD0_HIGH = 0x69  # address pin high (VCC)
+    MPU6050_DEFAULT_ADDRESS = MPU6050_ADDRESS_AD0_LOW
+
+def get_rotation():
+    __dev_id = C.MPU6050_DEFAULT_ADDRESS
+    raw_data = bus.read_i2c_block_data(__dev_id, C.MPU6050_RA_GYRO_XOUT_H, 6)
+    gyro = [0] * 3
+    gyro[0] = ctypes.c_int16(raw_data[0] << 8 | raw_data[1]).value
+    gyro[1] = ctypes.c_int16(raw_data[2] << 8 | raw_data[3]).value
+    gyro[2] = ctypes.c_int16(raw_data[4] << 8 | raw_data[5]).value
+    return gyro
+
 
 while True:
-    print("Gyroscope data")
     print("--------------")
 
     gyro_xout = read_word_2c(0x43)
     gyro_yout = read_word_2c(0x45)
     gyro_zout = read_word_2c(0x47)
-
-    print("{}\t{}\t{}\t{}".format("X out: ", gyro_xout, "scaled: ", (gyro_xout / 131)))
-    print("{}\t{}\t{}\t{}".format("Y out: ", gyro_yout, " scaled: ", (gyro_yout / 131)))
-    print("{}\t{}\t{}\t{}".format("Z out: ", gyro_zout, " scaled: ", (gyro_zout / 131)))
-
-    print("Accelerometer data")
-    print("------------------")
 
     accel_xout = read_word_2c(0x3b)
     accel_yout = read_word_2c(0x3d)
@@ -90,9 +99,6 @@ while True:
 
     print("X rotation: ", get_x_rotation(accel_xout_scaled, accel_yout_scaled, accel_zout_scaled))
     print("Y rotation: ", get_y_rotation(accel_xout_scaled, accel_yout_scaled, accel_zout_scaled))
-
-    print("NEW X rotation:", pitch(accel_xout_scaled, accel_yout_scaled, accel_zout_scaled))
-    print("NEW Y rotation:", roll(accel_xout_scaled, accel_yout_scaled, accel_zout_scaled))
-    print("NEW Z rotation:", yaw(accel_xout_scaled, accel_yout_scaled, accel_zout_scaled))
+    print(str(get_rotation()))
 
     time.sleep(1)
