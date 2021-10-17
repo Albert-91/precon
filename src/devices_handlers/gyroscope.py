@@ -38,6 +38,27 @@ def get_x_rotation(x, y, z):
     radians = math.atan2(y, dist(x, z))
     return math.degrees(radians)
 
+# pitch = 180 * atan (accelerationX/sqrt(accelerationY*accelerationY + accelerationZ*accelerationZ))/M_PI;
+# roll = 180 * atan (accelerationY/sqrt(accelerationX*accelerationX + accelerationZ*accelerationZ))/M_PI;
+# yaw = 180 * atan (accelerationZ/sqrt(accelerationX*accelerationX + accelerationZ*accelerationZ))/M_PI;
+
+
+def pitch(a_x, a_y, a_z):
+    return 180 * math.atan(a_x / dist(a_y, a_z)) / math.pi
+
+
+def roll(a_x, a_y, a_z):
+    return 180 * math.atan(a_y / dist(a_x, a_z)) / math.pi
+
+
+def yaw(a_x, a_y, a_z):
+    return 180 * math.atan(a_z / dist(a_x, a_z)) / math.pi
+
+
+def get_z_rotation(x, y, z):
+    radians = math.atan2(y, dist(x, z))
+    return math.degrees(radians)
+
 
 bus = smbus2.SMBus(1)
 address = 0x68
@@ -67,12 +88,11 @@ while True:
     accel_yout_scaled = accel_yout / 16384.0
     accel_zout_scaled = accel_zout / 16384.0
 
-    print("{}\t{}\t{}\t{}".format("X out: ", accel_xout, " scaled: ", accel_xout_scaled))
-    print("{}\t{}\t{}\t{}".format("Y out: ", accel_yout, " scaled: ", accel_yout_scaled))
-    print("{}\t{}\t{}\t{}".format("Z out: ", accel_zout, " scaled: ", accel_zout_scaled))
-
     print("X rotation: ", get_x_rotation(accel_xout_scaled, accel_yout_scaled, accel_zout_scaled))
     print("Y rotation: ", get_y_rotation(accel_xout_scaled, accel_yout_scaled, accel_zout_scaled))
 
-    print()
+    print("NEW X rotation:", pitch(accel_xout_scaled, accel_yout_scaled, accel_zout_scaled))
+    print("NEW Y rotation:", roll(accel_xout_scaled, accel_yout_scaled, accel_zout_scaled))
+    print("NEW Z rotation:", yaw(accel_xout_scaled, accel_yout_scaled, accel_zout_scaled))
+
     time.sleep(1)
