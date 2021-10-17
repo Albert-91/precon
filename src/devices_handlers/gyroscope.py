@@ -45,16 +45,6 @@ address = 0x68
 bus.write_byte_data(address, power_mgmt_1, 0)
 
 while True:
-    print("Gyroscope data")
-    print("--------------")
-
-    gyro_zout = read_word_2c(0x43)
-    gyro_yout = read_word_2c(0x45)
-    gyro_xout = read_word_2c(0x47)
-
-    print("{}\t{}\t{}\t{}".format("X out: ", gyro_xout, "scaled: ", (gyro_xout / 131)))
-    print("{}\t{}\t{}\t{}".format("Y out: ", gyro_yout, " scaled: ", (gyro_yout / 131)))
-    print("{}\t{}\t{}\t{}".format("Z out: ", gyro_zout, " scaled: ", (gyro_zout / 131)))
 
     print("Accelerometer data")
     print("------------------")
@@ -72,7 +62,9 @@ while True:
     print("{}\t{}\t{}\t{}".format("Z out: ", accel_zout, " scaled: ", accel_zout_scaled))
 
     print("X rotation: ", get_z_rotation(accel_xout_scaled, accel_yout_scaled, accel_zout_scaled))
+    print("NEW X rotation: ", get_z_rotation(accel_zout_scaled, accel_yout_scaled, accel_xout_scaled))
     print("Y rotation: ", get_y_rotation(accel_xout_scaled, accel_yout_scaled, accel_zout_scaled))
+    print("NEW Y rotation: ", get_y_rotation(accel_zout_scaled, accel_yout_scaled, accel_xout_scaled))
 
     print()
     time.sleep(1)
