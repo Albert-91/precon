@@ -4,7 +4,7 @@ from functools import reduce
 from typing import List, Tuple
 import math
 
-from devices_handlers.distance_sensor import get_distance_ahead
+from devices_handlers.distance_sensor import get_distance
 from devices_handlers.driving_engines import turn_right_on_angle, drive_forward_on_units, drive_backward_on_units
 
 logger = logging.getLogger(__name__)
@@ -144,7 +144,7 @@ class Explorer:
             DirectionInfo(
                 location=Location(*self._localizer.current_location),
                 angle=angle,
-                distance=await get_distance_ahead()
+                distance=await get_distance()
             )
         ]
         for _ in range(directions_number):
@@ -153,7 +153,7 @@ class Explorer:
                 DirectionInfo(
                     location=Location(*self._localizer.current_location),
                     angle=angle,
-                    distance=await get_distance_ahead()
+                    distance=await get_distance()
                 )
             )
             turn_right_on_angle(angle_per_rotation)

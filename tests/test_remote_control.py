@@ -50,7 +50,7 @@ async def test_drive_on_pressed_keys(
     mocker, create_screen, patch_gpio, patch_print, patch_time, key, called_function
 ):
     drive_func = mocker.patch(f"remote_control.{called_function}")
-    mocker.patch("remote_control.get_distance_ahead", return_value=distance_ahead_to_stop)
+    mocker.patch("remote_control.get_distance", return_value=distance_ahead_to_stop)
     screen = create_screen(key)
 
     await steer_vehicle(screen)
@@ -68,7 +68,7 @@ async def test_drive_forward_on_pressed_keys(
 ):
     drive_func = mocker.patch("remote_control.drive_forward")
     distance_allows_to_drive = distance_ahead_to_stop + 1
-    mocker.patch("remote_control.get_distance_ahead", return_value=distance_allows_to_drive)
+    mocker.patch("remote_control.get_distance", return_value=distance_allows_to_drive)
     screen = create_screen(key)
 
     await steer_vehicle(screen)
@@ -86,7 +86,7 @@ async def test_drive_forward_on_pressed_keys(
 async def test_stop_after_each_drive(
     mocker, create_screen, distance_ahead_to_stop, patch_gpio, patch_print, patch_time, key
 ):
-    mocker.patch("remote_control.get_distance_ahead", return_value=distance_ahead_to_stop + 1)
+    mocker.patch("remote_control.get_distance", return_value=distance_ahead_to_stop + 1)
     stop_func = mocker.patch("devices_handlers.driving_engines.stop_driving")
     screen = create_screen(key)
 
@@ -105,7 +105,7 @@ async def test_stop_when_distance_ahead_is_equal_or_less_than_3_and_robot_is_dri
 ):
     drive_func = mocker.patch("remote_control.drive_forward")
     stop_func = mocker.patch("remote_control.stop_driving")
-    mocker.patch("remote_control.get_distance_ahead", return_value=distance_ahead_to_stop)
+    mocker.patch("remote_control.get_distance", return_value=distance_ahead_to_stop)
     screen = create_screen(key)
 
     await steer_vehicle(screen)
@@ -127,7 +127,7 @@ async def test_not_stop_when_distance_ahead_is_equal_or_less_than_3(
     mocker, create_screen, distance_ahead_to_stop, patch_gpio, patch_print, patch_time, key, called_function
 ):
     drive_func = mocker.patch(f"remote_control.{called_function}")
-    mocker.patch("remote_control.get_distance_ahead", return_value=distance_ahead_to_stop)
+    mocker.patch("remote_control.get_distance", return_value=distance_ahead_to_stop)
     screen = create_screen(key)
 
     await steer_vehicle(screen)

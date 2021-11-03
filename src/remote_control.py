@@ -1,7 +1,6 @@
-import asyncio
 import curses
 
-from devices_handlers.distance_sensor import get_distance_ahead
+from devices_handlers.distance_sensor import get_distance
 from devices_handlers.driving_engines import turn_right, turn_left, drive_backward, stop_driving, drive_forward
 
 try:
@@ -15,7 +14,7 @@ DISTANCE_AHEAD_TO_STOP = 3
 
 
 async def _handle_driving_forward() -> None:
-    if await get_distance_ahead() > DISTANCE_AHEAD_TO_STOP:
+    if await get_distance() > DISTANCE_AHEAD_TO_STOP:
         drive_forward()
     else:
         stop_driving()
@@ -57,22 +56,3 @@ async def steer_vehicle(screen) -> None:
 
         if driving_handler:
             await driving_handler()
-
-
-if __name__ == '__main__':
-    screen = curses.initscr()
-    curses.noecho()
-    curses.cbreak()
-    screen.keypad(True)
-    loop = asyncio.get_event_loop()
-    try:
-        loop.run_until_complete(steer_vehicle(screen))
-    except KeyboardInterrupt:
-        print("Finishing remote control...")
-    finally:
-        loop.close()
-        curses.nocbreak()
-        screen.keypad(False)
-        curses.echo()
-        curses.endwin()
-        GPIO.cleanup()
