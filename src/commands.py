@@ -2,6 +2,8 @@ import asyncio
 import curses
 
 import click
+
+from devices_handlers.distance_sensor import show_distance as show_distance_func
 from remote_control import steer_vehicle
 
 try:
@@ -11,7 +13,7 @@ except (RuntimeError, ModuleNotFoundError):
     GPIO = fake_rpi.RPi.GPIO
 
 
-@click.command()
+@click.command(name="rc")
 def remote_control():
     screen = curses.initscr()
     screen.keypad(True)

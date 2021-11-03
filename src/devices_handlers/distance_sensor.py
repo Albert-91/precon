@@ -38,7 +38,7 @@ def _compute_distance(signal_delay: float) -> float:
     return (signal_delay * 34300) / 2
 
 
-async def get_distance_ahead() -> int:
+async def get_distance() -> int:
     """Function returns distance in `cm`"""
 
     _initialize_sensor()
@@ -48,11 +48,8 @@ async def get_distance_ahead() -> int:
     return int(distance)
 
 
-if __name__ == '__main__':
-    try:
-        while True:
-            dist = get_distance_ahead()
-            print(dist, "cm")
-            time.sleep(1)
-    finally:
-        GPIO.cleanup()
+async def show_distance() -> None:
+    while True:
+        dist = await get_distance()
+        print(dist, "cm")
+        time.sleep(1)
