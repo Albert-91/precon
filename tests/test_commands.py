@@ -18,3 +18,13 @@ def test_remote_control_run_steering_vehicle(mocker, cli_runner):
 
     assert result.exit_code == 0
     steer_vehicle.assert_called_once()
+
+
+def test_get_distance_ahead_of_sensor(mocker, cli_runner):
+    mocker.patch("commands.time")
+    get_distance = mocker.patch("commands.show_distance_func")
+
+    result = cli_runner.invoke(show_distance)
+
+    assert result.exit_code == 0
+    get_distance.assert_called_once()

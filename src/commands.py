@@ -27,3 +27,14 @@ def remote_control():
         screen.keypad(False)
         curses.endwin()
         GPIO.cleanup()
+
+
+@click.command(name="show-distance")
+def show_distance():
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(show_distance_func())
+    except KeyboardInterrupt:
+        print("Finishing measuring distance...")
+    finally:
+        GPIO.cleanup()
