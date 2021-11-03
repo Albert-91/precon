@@ -23,7 +23,6 @@ def remote_control():
     except KeyboardInterrupt:
         print("Finishing remote control...")
     finally:
-        loop.close()
         screen.keypad(False)
         curses.endwin()
         GPIO.cleanup()
