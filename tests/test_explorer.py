@@ -174,7 +174,8 @@ async def test_scan_area_set_direction_number_grater_than_maximum(mocker):
     mocker.patch("precon.exploring.turn_right_on_angle")
     mocker.patch("precon.exploring.get_distance")
     MAXIMUM_NUMBER_OF_DIRECTIONS = 10
-    mocker.patch.object(Explorer, "MAXIMUM_NUMBER_OF_DIRECTIONS", return_value=MAXIMUM_NUMBER_OF_DIRECTIONS, new_callable=PropertyMock)
+    mocker.patch.object(Explorer, "MAXIMUM_NUMBER_OF_DIRECTIONS",
+                        return_value=MAXIMUM_NUMBER_OF_DIRECTIONS, new_callable=PropertyMock)
 
     localizer = Localizer()
     explorer = Explorer(localizer)

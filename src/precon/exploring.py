@@ -178,7 +178,7 @@ class Explorer:
     def _validate_directions_number(self, directions_number) -> None:
         if not isinstance(directions_number, int) \
             or directions_number <= 1 \
-            or directions_number > self.MAXIMUM_NUMBER_OF_DIRECTIONS:
+                or directions_number > self.MAXIMUM_NUMBER_OF_DIRECTIONS:
             raise ValueError
 
 
