@@ -1,7 +1,7 @@
 import curses
 
-from devices_handlers.distance_sensor import get_distance
-from devices_handlers.driving_engines import turn_right, turn_left, drive_backward, stop_driving, drive_forward
+from precon.devices_handlers.distance_sensor import get_distance
+from precon.devices_handlers.driving_engines import turn_right, turn_left, drive_backward, stop_driving, drive_forward
 
 try:
     import RPi.GPIO as GPIO

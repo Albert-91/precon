@@ -1,6 +1,6 @@
 import pytest
 
-from devices_handlers.driving_engines import drive_forward, drive_backward, turn_right, turn_left, stop_driving
+from precon.devices_handlers.driving_engines import drive_forward, drive_backward, turn_right, turn_left, stop_driving
 
 
 @pytest.fixture

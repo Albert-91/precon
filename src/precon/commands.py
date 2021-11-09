@@ -3,7 +3,7 @@ import curses
 
 import click
 
-from devices_handlers.distance_sensor import show_distance as show_distance_func
+from precon.devices_handlers.distance_sensor import show_distance as show_distance_func
 from precon.remote_control import steer_vehicle
 
 try:

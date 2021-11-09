@@ -87,7 +87,7 @@ async def test_stop_after_each_drive(
     mocker, create_screen, distance_ahead_to_stop, patch_gpio, patch_print, patch_time, key
 ):
     mocker.patch("precon.remote_control.get_distance", return_value=distance_ahead_to_stop + 1)
-    stop_func = mocker.patch("devices_handlers.driving_engines.stop_driving")
+    stop_func = mocker.patch("precon.devices_handlers.driving_engines.stop_driving")
     screen = create_screen(key)
 
     await steer_vehicle(screen)

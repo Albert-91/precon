@@ -1,6 +1,6 @@
 import pytest
 
-from devices_handlers.distance_sensor import get_distance
+from precon.devices_handlers.distance_sensor import get_distance
 
 
 @pytest.mark.asyncio
