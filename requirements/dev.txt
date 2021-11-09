@@ -2,7 +2,7 @@
 
 fake-rpi==0.7.1
 pytest==6.2.5
-pytest-flakes==4.0.3
+pytest-asyncio==0.16.0
+pytest-flakes==4.0.4
 pytest-mock==3.6.1
 pytest-pythonpath==0.7.3
-pytest-asyncio==0.15.1
