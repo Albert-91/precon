@@ -3,8 +3,8 @@ import curses
 
 import click
 
-from devices_handlers.distance_sensor import show_distance as show_distance_func
-from remote_control import steer_vehicle
+from precon.devices_handlers.distance_sensor import show_distance as show_distance_func
+from precon.remote_control import steer_vehicle
 
 try:
     import RPi.GPIO as GPIO

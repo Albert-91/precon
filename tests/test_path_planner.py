@@ -2,7 +2,7 @@ from unittest.mock import PropertyMock
 
 import pytest
 
-from exploring import PathPlanner, ObstacleLocation, UndiscoveredRegion, Mapper
+from precon.exploring import PathPlanner, ObstacleLocation, UndiscoveredRegion, Mapper
 
 
 @pytest.mark.asyncio

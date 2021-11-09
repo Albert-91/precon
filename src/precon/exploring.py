@@ -4,8 +4,8 @@ from functools import reduce
 from typing import List, Tuple
 import math
 
-from devices_handlers.distance_sensor import get_distance
-from devices_handlers.driving_engines import turn_right_on_angle, drive_forward_on_units, drive_backward_on_units
+from precon.devices_handlers.distance_sensor import get_distance
+from precon.devices_handlers.driving_engines import turn_right_on_angle, drive_forward_on_units, drive_backward_on_units
 
 logger = logging.getLogger(__name__)
 

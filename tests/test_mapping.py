@@ -2,8 +2,7 @@ from unittest.mock import PropertyMock
 
 import pytest
 
-from exploring import DirectionInfo, Location
-from exploring import Mapper, ObstacleLocation
+from precon.exploring import DirectionInfo, Location, Mapper, ObstacleLocation
 
 
 @pytest.mark.parametrize("direction_info, expected_result", [

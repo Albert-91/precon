@@ -1,4 +1,4 @@
-from exploring import Localizer
+from precon.exploring import Localizer
 
 
 def test_updating_current_location():
