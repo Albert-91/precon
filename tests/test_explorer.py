@@ -70,7 +70,7 @@ async def test_number_of_measured_distances_during_gathering_directions_info(moc
 @pytest.mark.asyncio
 async def test_values_of_measured_distances_during_gathering_directions_info(mocker):
     NUMBER_OF_DIRECTIONS_TO_CHECK = 10
-    measured_distance = range(NUMBER_OF_DIRECTIONS_TO_CHECK+1)
+    measured_distance = range(NUMBER_OF_DIRECTIONS_TO_CHECK + 1)
     mocker.patch("precon.exploring.turn_right_on_angle")
     mocker.patch("precon.exploring.get_distance", side_effect=measured_distance)
 
