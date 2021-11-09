@@ -1,7 +1,7 @@
 import pytest
 from click.testing import CliRunner
 
-from commands import remote_control, show_distance
+from precon.commands import remote_control, show_distance
 
 
 @pytest.fixture()
@@ -10,9 +10,9 @@ def cli_runner():
 
 
 def test_remote_control_run_steering_vehicle(mocker, cli_runner):
-    mocker.patch("commands.curses.initscr")
-    mocker.patch("commands.curses.endwin")
-    steer_vehicle = mocker.patch("commands.steer_vehicle")
+    mocker.patch("precon.commands.curses.initscr")
+    mocker.patch("precon.commands.curses.endwin")
+    steer_vehicle = mocker.patch("precon.commands.steer_vehicle")
 
     result = cli_runner.invoke(remote_control)
 
@@ -21,7 +21,7 @@ def test_remote_control_run_steering_vehicle(mocker, cli_runner):
 
 
 def test_get_distance_ahead_of_sensor(mocker, cli_runner):
-    show_distance_func = mocker.patch("commands.show_distance_func")
+    show_distance_func = mocker.patch("precon.commands.show_distance_func")
 
     result = cli_runner.invoke(show_distance)
 

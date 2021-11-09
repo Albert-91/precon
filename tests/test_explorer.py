@@ -2,7 +2,7 @@ from unittest.mock import Mock, PropertyMock
 
 import pytest
 
-from exploring import Explorer, Location, DirectionInfo, NoDirectionFound, Mapper, Localizer, ObstacleLocation
+from precon.exploring import Explorer, Location, DirectionInfo, NoDirectionFound, Mapper, Localizer, ObstacleLocation
 
 
 @pytest.mark.asyncio
@@ -10,7 +10,7 @@ async def test_find_direction_to_move(mocker):
     expected_direction = DirectionInfo(Location(Mock(int), Mock(int)), Mock(int), distance=10)
     directions = [DirectionInfo(Location(Mock(int), Mock(int)), Mock(int), i) for i in range(5)]
     directions.append(expected_direction)
-    mocker.patch("exploring.Explorer.scan_area", return_value=directions)
+    mocker.patch("precon.exploring.Explorer.scan_area", return_value=directions)
 
     localizer = Localizer()
     explorer = Explorer(localizer)
@@ -21,7 +21,7 @@ async def test_find_direction_to_move(mocker):
 
 @pytest.mark.asyncio
 async def test_find_direction_to_move_with_gathered_empty_list(mocker):
-    mocker.patch("exploring.Explorer.scan_area", return_value=[])
+    mocker.patch("precon.exploring.Explorer.scan_area", return_value=[])
 
     localizer = Localizer()
     explorer = Explorer(localizer)
@@ -32,8 +32,8 @@ async def test_find_direction_to_move_with_gathered_empty_list(mocker):
 
 @pytest.mark.asyncio
 async def test_quantity_of_gathered_directions_info(mocker):
-    mocker.patch("exploring.turn_right_on_angle")
-    mocker.patch("exploring.get_distance", return_value=1)
+    mocker.patch("precon.exploring.turn_right_on_angle")
+    mocker.patch("precon.exploring.get_distance", return_value=1)
 
     localizer = Localizer()
     explorer = Explorer(localizer)
@@ -44,8 +44,8 @@ async def test_quantity_of_gathered_directions_info(mocker):
 
 @pytest.mark.asyncio
 async def test_types_of_gathered_directions_info(mocker):
-    mocker.patch("exploring.turn_right_on_angle")
-    mocker.patch("exploring.get_distance", return_value=1)
+    mocker.patch("precon.exploring.turn_right_on_angle")
+    mocker.patch("precon.exploring.get_distance", return_value=1)
 
     localizer = Localizer()
     explorer = Explorer(localizer)
@@ -57,8 +57,8 @@ async def test_types_of_gathered_directions_info(mocker):
 
 @pytest.mark.asyncio
 async def test_number_of_measured_distances_during_gathering_directions_info(mocker):
-    mocker.patch("exploring.turn_right_on_angle")
-    get_distance_function = mocker.patch("exploring.get_distance", return_value=1)
+    mocker.patch("precon.exploring.turn_right_on_angle")
+    get_distance_function = mocker.patch("precon.exploring.get_distance", return_value=1)
 
     localizer = Localizer()
     explorer = Explorer(localizer)
@@ -71,8 +71,8 @@ async def test_number_of_measured_distances_during_gathering_directions_info(moc
 async def test_values_of_measured_distances_during_gathering_directions_info(mocker):
     NUMBER_OF_DIRECTIONS_TO_CHECK = 10
     measured_distance = range(NUMBER_OF_DIRECTIONS_TO_CHECK+1)
-    mocker.patch("exploring.turn_right_on_angle")
-    mocker.patch("exploring.get_distance", side_effect=measured_distance)
+    mocker.patch("precon.exploring.turn_right_on_angle")
+    mocker.patch("precon.exploring.get_distance", side_effect=measured_distance)
 
     localizer = Localizer()
     explorer = Explorer(localizer)
@@ -84,8 +84,8 @@ async def test_values_of_measured_distances_during_gathering_directions_info(moc
 
 @pytest.mark.asyncio
 async def test_scan_area_number_of_turning_to_measure_distance(mocker):
-    turning_right_func = mocker.patch("exploring.turn_right_on_angle")
-    mocker.patch("exploring.get_distance", return_value=1)
+    turning_right_func = mocker.patch("precon.exploring.turn_right_on_angle")
+    mocker.patch("precon.exploring.get_distance", return_value=1)
     DIRECTIONS_NUMBER = 10
     angle_to_rotate = int(360 / 10)
 
@@ -100,8 +100,8 @@ async def test_scan_area_number_of_turning_to_measure_distance(mocker):
 
 @pytest.mark.asyncio
 async def test_scan_area_last_of_angles_is_less_than_360(mocker):
-    mocker.patch("exploring.turn_right_on_angle")
-    mocker.patch("exploring.get_distance", return_value=1)
+    mocker.patch("precon.exploring.turn_right_on_angle")
+    mocker.patch("precon.exploring.get_distance", return_value=1)
 
     localizer = Localizer()
     explorer = Explorer(localizer)
@@ -112,8 +112,8 @@ async def test_scan_area_last_of_angles_is_less_than_360(mocker):
 
 @pytest.mark.asyncio
 async def test_scan_area__saved_angles_are_relative_to_current_angle(mocker):
-    mocker.patch("exploring.turn_right_on_angle")
-    mocker.patch("exploring.get_distance", return_value=1)
+    mocker.patch("precon.exploring.turn_right_on_angle")
+    mocker.patch("precon.exploring.get_distance", return_value=1)
 
     localizer = Localizer(angle=10)
     explorer = Explorer(localizer)
@@ -127,8 +127,8 @@ async def test_scan_area__saved_angles_are_relative_to_current_angle(mocker):
 
 @pytest.mark.asyncio
 async def test_scan_area_always_fill_to_360_degrees(mocker):
-    turning_right_func = mocker.patch("exploring.turn_right_on_angle")
-    mocker.patch("exploring.get_distance", return_value=1)
+    turning_right_func = mocker.patch("precon.exploring.turn_right_on_angle")
+    mocker.patch("precon.exploring.get_distance", return_value=1)
 
     localizer = Localizer()
     explorer = Explorer(localizer)
@@ -140,8 +140,8 @@ async def test_scan_area_always_fill_to_360_degrees(mocker):
 
 @pytest.mark.asyncio
 async def test_scan_area_map_all_directions(mocker):
-    map_obstacles_method = mocker.patch("exploring.Mapper.map_obstacles")
-    mocker.patch("exploring.get_distance", return_value=1)
+    map_obstacles_method = mocker.patch("precon.exploring.Mapper.map_obstacles")
+    mocker.patch("precon.exploring.get_distance", return_value=1)
 
     localizer = Localizer()
     explorer = Explorer(localizer)
@@ -160,8 +160,8 @@ async def test_scan_area_map_all_directions(mocker):
 ])
 @pytest.mark.asyncio
 async def test_scan_area_bad_input(mocker, directions_number):
-    mocker.patch("exploring.turn_right_on_angle")
-    mocker.patch("exploring.get_distance")
+    mocker.patch("precon.exploring.turn_right_on_angle")
+    mocker.patch("precon.exploring.get_distance")
 
     localizer = Localizer()
     explorer = Explorer(localizer)
@@ -171,8 +171,8 @@ async def test_scan_area_bad_input(mocker, directions_number):
 
 @pytest.mark.asyncio
 async def test_scan_area_set_direction_number_grater_than_maximum(mocker):
-    mocker.patch("exploring.turn_right_on_angle")
-    mocker.patch("exploring.get_distance")
+    mocker.patch("precon.exploring.turn_right_on_angle")
+    mocker.patch("precon.exploring.get_distance")
     MAXIMUM_NUMBER_OF_DIRECTIONS = 10
     mocker.patch.object(Explorer, "MAXIMUM_NUMBER_OF_DIRECTIONS", return_value=MAXIMUM_NUMBER_OF_DIRECTIONS, new_callable=PropertyMock)
 
@@ -186,7 +186,7 @@ async def test_scan_area_set_direction_number_grater_than_maximum(mocker):
 async def test_explore_undiscovered_area__scan_area_when_there_is_no_mapped_obstacles(mocker):
     mocker.patch.object(Mapper, "obstacles",
                         side_effect=[[], [], [ObstacleLocation(Mock(), Mock())]], new_callable=PropertyMock)
-    scan_area_method = mocker.patch("exploring.Explorer.scan_area")
+    scan_area_method = mocker.patch("precon.exploring.Explorer.scan_area")
 
     localizer = Localizer()
     explorer = Explorer(localizer)
@@ -199,7 +199,7 @@ async def test_explore_undiscovered_area__scan_area_when_there_is_no_mapped_obst
 async def test_explore_undiscovered_area__with_already_scanned_obstacles(mocker):
     mocker.patch.object(Mapper, "obstacles",
                         return_value=[ObstacleLocation(Mock(), Mock())], new_callable=PropertyMock)
-    scan_area_method = mocker.patch("exploring.Explorer.scan_area")
+    scan_area_method = mocker.patch("precon.exploring.Explorer.scan_area")
 
     localizer = Localizer()
     explorer = Explorer(localizer)
