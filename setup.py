@@ -1,5 +1,7 @@
 from setuptools import setup, find_packages
 import sys
+from precon import __version__ as version
+
 
 if sys.platform == "linux":
     gpio_lib = "RPi.GPIO==0.7.0"
@@ -11,7 +13,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="precon",
-    version="1.0.0",
+    version=version,
     description="Software for robot which is running on Raspberry PI ZERO",
     long_description=long_description,
     long_description_content_type="text/markdown",
