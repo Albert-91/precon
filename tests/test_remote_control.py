@@ -1,14 +1,16 @@
 import curses
+from typing import Union, Callable
 from unittest.mock import patch, Mock
 
 import pytest
+from pytest_mock import MockerFixture
 
 from precon.remote_control import steer_vehicle
 
 
 @pytest.fixture()
-def create_screen():
-    def inner(key):
+def create_screen() -> Callable[[Union[str, int]], Mock]:
+    def inner(key: Union[str, int]) -> Mock:
         with patch("precon.remote_control.curses.initscr") as screen:
             if isinstance(key, str):
                 key = ord(key)
@@ -18,22 +20,22 @@ def create_screen():
 
 
 @pytest.fixture()
-def distance_ahead_to_stop():
+def distance_ahead_to_stop() -> int:
     return 3
 
 
 @pytest.fixture()
-def patch_gpio(mocker):
+def patch_gpio(mocker: MockerFixture) -> None:
     mocker.patch("precon.remote_control.fake_rpi.RPi.GPIO.output")
 
 
 @pytest.fixture()
-def patch_print(mocker):
+def patch_print(mocker: MockerFixture) -> None:
     mocker.patch("builtins.print")
 
 
 @pytest.fixture()
-def patch_time(mocker):
+def patch_time(mocker: MockerFixture) -> None:
     mocker.patch("precon.devices_handlers.driving_engines.time")
 
 
@@ -47,8 +49,14 @@ def patch_time(mocker):
 ])
 @pytest.mark.asyncio
 async def test_drive_on_pressed_keys(
-    mocker, create_screen, patch_gpio, patch_print, patch_time, key, called_function
-):
+    mocker: MockerFixture,
+    create_screen: Callable[[Union[str, int]], Mock],
+    patch_gpio: None,
+    patch_print: None,
+    patch_time: None,
+    key: Union[int, str],
+    called_function: str
+) -> None:
     drive_func = mocker.patch(f"precon.remote_control.{called_function}")
     mocker.patch("precon.remote_control.get_distance", return_value=distance_ahead_to_stop)
     screen = create_screen(key)
@@ -64,8 +72,14 @@ async def test_drive_on_pressed_keys(
 ])
 @pytest.mark.asyncio
 async def test_drive_forward_on_pressed_keys(
-    mocker, create_screen, patch_gpio, patch_print, patch_time, key, distance_ahead_to_stop
-):
+    mocker: MockerFixture,
+    create_screen: Callable[[Union[str, int]], Mock],
+    patch_gpio: None,
+    patch_print: None,
+    patch_time: None,
+    key: Union[int, str],
+    distance_ahead_to_stop: int
+) -> None:
     drive_func = mocker.patch("precon.remote_control.drive_forward")
     distance_allows_to_drive = distance_ahead_to_stop + 1
     mocker.patch("precon.remote_control.get_distance", return_value=distance_allows_to_drive)
@@ -84,8 +98,14 @@ async def test_drive_forward_on_pressed_keys(
 ])
 @pytest.mark.asyncio
 async def test_stop_after_each_drive(
-    mocker, create_screen, distance_ahead_to_stop, patch_gpio, patch_print, patch_time, key
-):
+    mocker: MockerFixture,
+    create_screen: Callable[[Union[str, int]], Mock],
+    distance_ahead_to_stop: int,
+    patch_gpio: None,
+    patch_print: None,
+    patch_time: None,
+    key: Union[int, str]
+) -> None:
     mocker.patch("precon.remote_control.get_distance", return_value=distance_ahead_to_stop + 1)
     stop_func = mocker.patch("precon.devices_handlers.driving_engines.stop_driving")
     screen = create_screen(key)
@@ -101,8 +121,14 @@ async def test_stop_after_each_drive(
 ])
 @pytest.mark.asyncio
 async def test_stop_when_distance_ahead_is_equal_or_less_than_3_and_robot_is_driving_forward(
-    mocker, create_screen, distance_ahead_to_stop, patch_gpio, patch_print, patch_time, key
-):
+    mocker: MockerFixture,
+    create_screen: Callable[[Union[str, int]], Mock],
+    distance_ahead_to_stop: int,
+    patch_gpio: None,
+    patch_print: None,
+    patch_time: None,
+    key: Union[int, str]
+) -> None:
     drive_func = mocker.patch("precon.remote_control.drive_forward")
     stop_func = mocker.patch("precon.remote_control.stop_driving")
     mocker.patch("precon.remote_control.get_distance", return_value=distance_ahead_to_stop)
@@ -124,8 +150,15 @@ async def test_stop_when_distance_ahead_is_equal_or_less_than_3_and_robot_is_dri
 ])
 @pytest.mark.asyncio
 async def test_not_stop_when_distance_ahead_is_equal_or_less_than_3(
-    mocker, create_screen, distance_ahead_to_stop, patch_gpio, patch_print, patch_time, key, called_function
-):
+    mocker: MockerFixture,
+    create_screen: Callable[[Union[str, int]], Mock],
+    distance_ahead_to_stop: int,
+    patch_gpio: None,
+    patch_print: None,
+    patch_time: None,
+    key: Union[int, str],
+    called_function: str
+) -> None:
     drive_func = mocker.patch(f"precon.remote_control.{called_function}")
     mocker.patch("precon.remote_control.get_distance", return_value=distance_ahead_to_stop)
     screen = create_screen(key)

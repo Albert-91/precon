@@ -1,6 +1,8 @@
+from typing import List
 from unittest.mock import PropertyMock
 
 import pytest
+from pytest_mock import MockerFixture
 
 from precon.exploring import DirectionInfo, Location, Mapper, ObstacleLocation
 
@@ -23,7 +25,11 @@ from precon.exploring import DirectionInfo, Location, Mapper, ObstacleLocation
     ([DirectionInfo(Location(-1, -1), angle=60, distance=10)], [ObstacleLocation(8, 4)]),
 ])
 @pytest.mark.asyncio
-async def test_map_locations_from_directions_info(mocker, direction_info, expected_result):
+async def test_map_locations_from_directions_info(
+    mocker: MockerFixture,
+    direction_info: List[DirectionInfo],
+    expected_result: List[ObstacleLocation]
+) -> None:
     mocker.patch.object(Mapper, "MAXIMUM_DISTANCE_TO_SET_OBSTACLE", return_value=50, new_callable=PropertyMock)
 
     mapper = Mapper()
@@ -33,7 +39,7 @@ async def test_map_locations_from_directions_info(mocker, direction_info, expect
 
 
 @pytest.mark.asyncio
-async def test_map_locations_exclude_distances_which_sensor_does_not_handle(mocker):
+async def test_map_locations_exclude_distances_which_sensor_does_not_handle(mocker: MockerFixture):
     MAXIMUM_DISTANCE_TO_SET_OBSTACLE = 50
     mocker.patch.object(Mapper, "MAXIMUM_DISTANCE_TO_SET_OBSTACLE",
                         return_value=MAXIMUM_DISTANCE_TO_SET_OBSTACLE, new_callable=PropertyMock)

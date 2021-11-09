@@ -40,11 +40,11 @@ class UndiscoveredRegion:
 
 class Localizer:
 
-    def __init__(self, x: float = 0, y: float = 0, angle: int = 0) -> None:
+    def __init__(self, x: float = 0.0, y: float = 0.0, angle: int = 0) -> None:
         self._x = x
         self._y = y
         self._angle = angle
-        self._locations: List = [self.current_location]
+        self._locations: List[Tuple[float, float]] = [self.current_location]
 
     @property
     def current_location(self) -> Tuple[float, float]:
@@ -55,10 +55,10 @@ class Localizer:
         return self._angle
 
     @property
-    def all_locations(self) -> List[Tuple[int, int]]:
+    def all_locations(self) -> List[Tuple[float, float]]:
         return self._locations
 
-    def update(self, movement, angle=0) -> None:
+    def update(self, movement: int, angle: int = 0) -> None:
         self._y = round(self._y + movement * math.cos(math.radians(angle)), 3)
         self._x = round(self._x + movement * math.sin(math.radians(angle)), 3)
         self._angle += angle
@@ -71,7 +71,7 @@ class Mapper:
 
     MAXIMUM_DISTANCE_TO_SET_OBSTACLE = 2000
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._obstacles: List[ObstacleLocation] = []
 
     @property
@@ -79,8 +79,8 @@ class Mapper:
         return self._obstacles
 
     async def map_obstacles(self, directions: List[DirectionInfo]) -> None:
-        directions = filter(lambda x: x.distance <= self.MAXIMUM_DISTANCE_TO_SET_OBSTACLE, directions)
-        for direction in directions:
+        directions_less_than_max = filter(lambda x: x.distance <= self.MAXIMUM_DISTANCE_TO_SET_OBSTACLE, directions)
+        for direction in directions_less_than_max:
             location = self._compute_obstacle_coordinates(direction)
             self._obstacles.append(location)
             logger.debug(f"Added new obstacle's location: {location}")
@@ -88,7 +88,7 @@ class Mapper:
     @staticmethod
     def _compute_obstacle_coordinates(direction: DirectionInfo) -> ObstacleLocation:
         def round_half_up(n: float, decimals: int = 0) -> float:
-            multiplier = 10 ** decimals
+            multiplier: int = 10 ** decimals
             return math.floor(n * multiplier + 0.5) / multiplier
 
         y = direction.location.y + direction.distance * math.cos(math.radians(direction.angle))
@@ -124,13 +124,13 @@ class Explorer:
     """Explorer knows current location and takes information which areas has to be discovered.
     He decides which area will be discovered as first."""
 
-    MAXIMUM_NUMBER_OF_DIRECTIONS = 20
+    MAXIMUM_NUMBER_OF_DIRECTIONS: int = 20
 
-    def __init__(self, localizer) -> None:
-        self._localizer = localizer
-        self._mapper = Mapper()
+    def __init__(self, localizer: Localizer) -> None:
+        self._localizer: Localizer = localizer
+        self._mapper: Mapper = Mapper()
 
-    async def run(self):
+    async def run(self) -> None:
         await self.scan_area()
         while not self._mapper.obstacles:
             self.move_forward(unit=100)
@@ -175,7 +175,7 @@ class Explorer:
             raise NoDirectionFound
         return reduce(lambda a, b: a if a.distance > b.distance else b, directions)
 
-    def _validate_directions_number(self, directions_number) -> None:
+    def _validate_directions_number(self, directions_number: int) -> None:
         if not isinstance(directions_number, int) \
             or directions_number <= 1 \
                 or directions_number > self.MAXIMUM_NUMBER_OF_DIRECTIONS:

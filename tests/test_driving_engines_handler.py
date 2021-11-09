@@ -1,41 +1,42 @@
 import pytest
+from pytest_mock import MockerFixture
 
 from precon.devices_handlers.driving_engines import drive_forward, drive_backward, turn_right, turn_left, stop_driving
 
 
 @pytest.fixture
-def right_engine_forward_pin():
+def right_engine_forward_pin() -> int:
     return 7
 
 
 @pytest.fixture
-def right_engine_backward_pin():
+def right_engine_backward_pin() -> int:
     return 11
 
 
 @pytest.fixture
-def left_engine_forward_pin():
+def left_engine_forward_pin() -> int:
     return 13
 
 
 @pytest.fixture
-def left_engine_backward_pin():
+def left_engine_backward_pin() -> int:
     return 15
 
 
 @pytest.fixture()
-def patch_time(mocker):
+def patch_time(mocker: MockerFixture) -> None:
     mocker.patch("precon.devices_handlers.driving_engines.time")
 
 
 def test_driving_forward(
-    mocker,
-    right_engine_forward_pin,
-    right_engine_backward_pin,
-    left_engine_forward_pin,
-    left_engine_backward_pin,
-    patch_time
-):
+    mocker: MockerFixture,
+    right_engine_forward_pin: int,
+    right_engine_backward_pin: int,
+    left_engine_forward_pin: int,
+    left_engine_backward_pin: int,
+    patch_time: None
+) -> None:
     output = mocker.patch("precon.devices_handlers.driving_engines.fake_rpi.RPi.GPIO.output")
 
     drive_forward()
@@ -47,13 +48,13 @@ def test_driving_forward(
 
 
 def test_driving_backward(
-    mocker,
-    right_engine_forward_pin,
-    right_engine_backward_pin,
-    left_engine_forward_pin,
-    left_engine_backward_pin,
-    patch_time
-):
+    mocker: MockerFixture,
+    right_engine_forward_pin: int,
+    right_engine_backward_pin: int,
+    left_engine_forward_pin: int,
+    left_engine_backward_pin: int,
+    patch_time: None
+) -> None:
     output = mocker.patch("precon.devices_handlers.driving_engines.fake_rpi.RPi.GPIO.output")
 
     drive_backward()
@@ -65,13 +66,13 @@ def test_driving_backward(
 
 
 def test_turning_right(
-    mocker,
-    right_engine_forward_pin,
-    right_engine_backward_pin,
-    left_engine_forward_pin,
-    left_engine_backward_pin,
-    patch_time
-):
+    mocker: MockerFixture,
+    right_engine_forward_pin: int,
+    right_engine_backward_pin: int,
+    left_engine_forward_pin: int,
+    left_engine_backward_pin: int,
+    patch_time: None
+) -> None:
     output = mocker.patch("precon.devices_handlers.driving_engines.fake_rpi.RPi.GPIO.output")
 
     turn_right()
@@ -83,13 +84,13 @@ def test_turning_right(
 
 
 def test_turning_left(
-    mocker,
-    right_engine_forward_pin,
-    right_engine_backward_pin,
-    left_engine_forward_pin,
-    left_engine_backward_pin,
-    patch_time
-):
+    mocker: MockerFixture,
+    right_engine_forward_pin: int,
+    right_engine_backward_pin: int,
+    left_engine_forward_pin: int,
+    left_engine_backward_pin: int,
+    patch_time: None
+) -> None:
     output = mocker.patch("precon.devices_handlers.driving_engines.fake_rpi.RPi.GPIO.output")
 
     turn_left()
@@ -101,13 +102,13 @@ def test_turning_left(
 
 
 def test_stop_drives(
-    mocker,
-    right_engine_forward_pin,
-    right_engine_backward_pin,
-    left_engine_forward_pin,
-    left_engine_backward_pin,
-    patch_time
-):
+    mocker: MockerFixture,
+    right_engine_forward_pin: int,
+    right_engine_backward_pin: int,
+    left_engine_forward_pin: int,
+    left_engine_backward_pin: int,
+    patch_time: None
+) -> None:
     output = mocker.patch("precon.devices_handlers.driving_engines.fake_rpi.RPi.GPIO.output")
 
     stop_driving()

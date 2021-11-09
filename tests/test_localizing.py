@@ -1,7 +1,7 @@
 from precon.exploring import Localizer
 
 
-def test_updating_current_location():
+def test_updating_current_location() -> None:
     localizator = Localizer(x=0, y=0, angle=0)
 
     localizator.update(movement=1, angle=0)
@@ -10,7 +10,7 @@ def test_updating_current_location():
     assert localizator.current_angle == 0
 
 
-def test_updating_current_angle():
+def test_updating_current_angle() -> None:
     localizator = Localizer(x=0, y=0, angle=0)
 
     localizator.update(movement=0, angle=10)
@@ -19,7 +19,7 @@ def test_updating_current_angle():
     assert localizator.current_angle == 10
 
 
-def test_computing_location_with_angle_grater_than_0():
+def test_computing_location_with_angle_grater_than_0() -> None:
     localizator = Localizer(x=0, y=0, angle=0)
 
     localizator.update(movement=1, angle=45)
@@ -28,7 +28,7 @@ def test_computing_location_with_angle_grater_than_0():
     assert localizator.current_angle == 45
 
 
-def test_all_locations_with_updated_x():
+def test_all_locations_with_updated_x() -> None:
     localizator = Localizer(x=0, y=0)
 
     localizator.update(1, 0)
@@ -39,7 +39,7 @@ def test_all_locations_with_updated_x():
     assert localizator.all_locations[-1] == localizator.current_location
 
 
-def test_all_locations_with_updated_x_multiple_times():
+def test_all_locations_with_updated_x_multiple_times() -> None:
     localizator = Localizer(x=0, y=0)
     UPDATES_NUMBER = 5
 

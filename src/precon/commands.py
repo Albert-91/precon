@@ -14,7 +14,7 @@ except (RuntimeError, ModuleNotFoundError):
 
 
 @click.command(name="rc")
-def remote_control():
+def remote_control() -> None:
     screen = curses.initscr()
     screen.keypad(True)
     loop = asyncio.get_event_loop()
@@ -29,7 +29,7 @@ def remote_control():
 
 
 @click.command(name="show-distance")
-def show_distance():
+def show_distance() -> None:
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(show_distance_func())

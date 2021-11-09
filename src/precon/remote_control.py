@@ -1,4 +1,5 @@
 import curses
+from _curses import _CursesWindow
 
 from precon.devices_handlers.distance_sensor import get_distance
 from precon.devices_handlers.driving_engines import turn_right, turn_left, drive_backward, stop_driving, drive_forward
@@ -32,7 +33,7 @@ async def _handle_turning_right() -> None:
     turn_right()
 
 
-async def steer_vehicle(screen) -> None:
+async def steer_vehicle(screen: _CursesWindow) -> None:
     print("Press key arrows OR 'WSAD' to drive your vehicle")
     print("Press 'q' key quit")
     while True:
