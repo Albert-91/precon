@@ -39,7 +39,7 @@ async def test_map_locations_from_directions_info(
 
 
 @pytest.mark.asyncio
-async def test_map_locations_exclude_distances_which_sensor_does_not_handle(mocker: MockerFixture):
+async def test_map_locations_exclude_distances_which_sensor_does_not_handle(mocker: MockerFixture) -> None:
     MAXIMUM_DISTANCE_TO_SET_OBSTACLE = 50
     mocker.patch.object(Mapper, "MAXIMUM_DISTANCE_TO_SET_OBSTACLE",
                         return_value=MAXIMUM_DISTANCE_TO_SET_OBSTACLE, new_callable=PropertyMock)
