@@ -5,6 +5,7 @@ try:
     import RPi.GPIO as GPIO
 except (RuntimeError, ModuleNotFoundError):
     import fake_rpi
+
     GPIO = fake_rpi.RPi.GPIO
 
 
@@ -46,6 +47,7 @@ def drive_with_intervals(drive_callback: Callable[[], None], movement_time: floa
         drive_callback()
         time.sleep(movement_time)
         stop_driving()
+
     return inner
 
 

@@ -152,14 +152,17 @@ async def test_scan_area_map_all_directions(mocker: MockerFixture) -> None:
     map_obstacles_method.assert_called_once_with(directions)
 
 
-@pytest.mark.parametrize("directions_number", [
-    0,
-    -50,
-    1.1,
-    None,
-    "",
-    "50",
-])
+@pytest.mark.parametrize(
+    "directions_number",
+    [
+        0,
+        -50,
+        1.1,
+        None,
+        "",
+        "50",
+    ],
+)
 @pytest.mark.asyncio
 async def test_scan_area_bad_input(mocker: MockerFixture, directions_number: Any) -> None:
     mocker.patch("precon.exploring.turn_right_on_angle")
@@ -176,8 +179,9 @@ async def test_scan_area_set_direction_number_grater_than_maximum(mocker: Mocker
     mocker.patch("precon.exploring.turn_right_on_angle")
     mocker.patch("precon.exploring.get_distance")
     MAXIMUM_NUMBER_OF_DIRECTIONS = 10
-    mocker.patch.object(Explorer, "MAXIMUM_NUMBER_OF_DIRECTIONS",
-                        return_value=MAXIMUM_NUMBER_OF_DIRECTIONS, new_callable=PropertyMock)
+    mocker.patch.object(
+        Explorer, "MAXIMUM_NUMBER_OF_DIRECTIONS", return_value=MAXIMUM_NUMBER_OF_DIRECTIONS, new_callable=PropertyMock
+    )
 
     localizer = Localizer()
     explorer = Explorer(localizer)
@@ -187,8 +191,9 @@ async def test_scan_area_set_direction_number_grater_than_maximum(mocker: Mocker
 
 @pytest.mark.asyncio
 async def test_explore_undiscovered_area__scan_area_when_there_is_no_mapped_obstacles(mocker: MockerFixture) -> None:
-    mocker.patch.object(Mapper, "obstacles",
-                        side_effect=[[], [], [ObstacleLocation(Mock(), Mock())]], new_callable=PropertyMock)
+    mocker.patch.object(
+        Mapper, "obstacles", side_effect=[[], [], [ObstacleLocation(Mock(), Mock())]], new_callable=PropertyMock
+    )
     scan_area_method = mocker.patch("precon.exploring.Explorer.scan_area")
 
     localizer = Localizer()
@@ -200,8 +205,7 @@ async def test_explore_undiscovered_area__scan_area_when_there_is_no_mapped_obst
 
 @pytest.mark.asyncio
 async def test_explore_undiscovered_area__with_already_scanned_obstacles(mocker: MockerFixture) -> None:
-    mocker.patch.object(Mapper, "obstacles",
-                        return_value=[ObstacleLocation(Mock(), Mock())], new_callable=PropertyMock)
+    mocker.patch.object(Mapper, "obstacles", return_value=[ObstacleLocation(Mock(), Mock())], new_callable=PropertyMock)
     scan_area_method = mocker.patch("precon.exploring.Explorer.scan_area")
 
     localizer = Localizer()

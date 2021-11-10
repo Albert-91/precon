@@ -39,7 +39,6 @@ class UndiscoveredRegion:
 
 
 class Localizer:
-
     def __init__(self, x: float = 0.0, y: float = 0.0, angle: int = 0) -> None:
         self._x = x
         self._y = y
@@ -97,7 +96,6 @@ class Mapper:
 
 
 class PathPlanner:
-
     def __init__(self, mapper: Mapper) -> None:
         self._mapper: Mapper = mapper
         self._undiscovered_regions: List[UndiscoveredRegion] = []
@@ -142,18 +140,14 @@ class Explorer:
         angle = self._localizer.current_angle
         directions = [
             DirectionInfo(
-                location=Location(*self._localizer.current_location),
-                angle=angle,
-                distance=await get_distance()
+                location=Location(*self._localizer.current_location), angle=angle, distance=await get_distance()
             )
         ]
         for _ in range(directions_number):
             angle += angle_per_rotation
             directions.append(
                 DirectionInfo(
-                    location=Location(*self._localizer.current_location),
-                    angle=angle,
-                    distance=await get_distance()
+                    location=Location(*self._localizer.current_location), angle=angle, distance=await get_distance()
                 )
             )
             turn_right_on_angle(angle_per_rotation)
@@ -176,9 +170,11 @@ class Explorer:
         return reduce(lambda a, b: a if a.distance > b.distance else b, directions)
 
     def _validate_directions_number(self, directions_number: int) -> None:
-        if not isinstance(directions_number, int) \
-            or directions_number <= 1 \
-                or directions_number > self.MAXIMUM_NUMBER_OF_DIRECTIONS:
+        if (
+            not isinstance(directions_number, int)
+            or directions_number <= 1
+            or directions_number > self.MAXIMUM_NUMBER_OF_DIRECTIONS
+        ):
             raise ValueError
 
 

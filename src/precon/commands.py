@@ -10,6 +10,7 @@ try:
     import RPi.GPIO as GPIO
 except (RuntimeError, ModuleNotFoundError):
     import fake_rpi
+
     GPIO = fake_rpi.RPi.GPIO
 
 

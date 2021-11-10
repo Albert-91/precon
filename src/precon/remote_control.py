@@ -8,6 +8,7 @@ try:
     import RPi.GPIO as GPIO
 except (RuntimeError, ModuleNotFoundError):
     import fake_rpi
+
     GPIO = fake_rpi.RPi.GPIO
 
 
@@ -38,20 +39,17 @@ async def steer_vehicle(screen: _CursesWindow) -> None:
     print("Press 'q' key quit")
     while True:
         char = screen.getch()
-        if char == ord('q'):
+        if char == ord("q"):
             break
         handlers = {
             curses.KEY_UP: _handle_driving_forward,
-            ord('w'): _handle_driving_forward,
-
+            ord("w"): _handle_driving_forward,
             curses.KEY_DOWN: _handle_driving_backward,
-            ord('s'): _handle_driving_backward,
-
+            ord("s"): _handle_driving_backward,
             curses.KEY_LEFT: _handle_turning_left,
-            ord('a'): _handle_turning_left,
-
+            ord("a"): _handle_turning_left,
             curses.KEY_RIGHT: _handle_turning_right,
-            ord('d'): _handle_turning_right,
+            ord("d"): _handle_turning_right,
         }
         driving_handler = handlers.get(char)
 

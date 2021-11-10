@@ -27,7 +27,7 @@ async def test_computing_undiscovered_locations_with_line_from_obstacles_locatio
 
 @pytest.mark.asyncio
 async def test_computing_undiscovered_locations_with_two_crossed_lines_from_obstacles_locations(
-    mocker: MockerFixture
+    mocker: MockerFixture,
 ) -> None:
     obstacles = [
         ObstacleLocation(x=0, y=3),
