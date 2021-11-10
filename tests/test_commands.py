@@ -12,6 +12,7 @@ def cli_runner() -> CliRunner:
 
 def test_remote_control_run_steering_vehicle(mocker: MockerFixture, cli_runner: CliRunner) -> None:
     steer_vehicle = mocker.patch("precon.commands.steer_vehicle")
+    mocker.patch("precon.commands.Screen")
 
     result = cli_runner.invoke(remote_control)
 

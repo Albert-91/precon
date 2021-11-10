@@ -16,6 +16,7 @@ def patch_screen() -> Callable[[Union[str, int]], Mock]:
             key = ord(key)
         screen.get_pressed_char = Mock(side_effect=[key, ord("q")])
         return screen
+
     return inner
 
 
@@ -53,7 +54,7 @@ def patch_time(mocker: MockerFixture) -> None:
 @pytest.mark.asyncio
 async def test_drive_on_pressed_keys(
     mocker: MockerFixture,
-    patch_screen,
+    patch_screen: Callable[[Union[str, int]], Mock],
     patch_gpio: None,
     patch_print: None,
     patch_time: None,
@@ -79,7 +80,7 @@ async def test_drive_on_pressed_keys(
 @pytest.mark.asyncio
 async def test_drive_forward_on_pressed_keys(
     mocker: MockerFixture,
-    patch_screen,
+    patch_screen: Callable[[Union[str, int]], Mock],
     patch_gpio: None,
     patch_print: None,
     patch_time: None,
@@ -112,7 +113,7 @@ async def test_drive_forward_on_pressed_keys(
 @pytest.mark.asyncio
 async def test_stop_after_each_drive(
     mocker: MockerFixture,
-    patch_screen,
+    patch_screen: Callable[[Union[str, int]], Mock],
     distance_ahead_to_stop: int,
     patch_gpio: None,
     patch_print: None,
@@ -138,7 +139,7 @@ async def test_stop_after_each_drive(
 @pytest.mark.asyncio
 async def test_stop_when_distance_ahead_is_equal_or_less_than_3_and_robot_is_driving_forward(
     mocker: MockerFixture,
-    patch_screen,
+    patch_screen: Callable[[Union[str, int]], Mock],
     distance_ahead_to_stop: int,
     patch_gpio: None,
     patch_print: None,
@@ -170,7 +171,7 @@ async def test_stop_when_distance_ahead_is_equal_or_less_than_3_and_robot_is_dri
 @pytest.mark.asyncio
 async def test_not_stop_when_distance_ahead_is_equal_or_less_than_3(
     mocker: MockerFixture,
-    patch_screen,
+    patch_screen: Callable[[Union[str, int]], Mock],
     distance_ahead_to_stop: int,
     patch_gpio: None,
     patch_print: None,

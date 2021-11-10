@@ -17,9 +17,12 @@ except (RuntimeError, ModuleNotFoundError):
 def remote_control() -> None:
     loop = asyncio.get_event_loop()
     try:
-        loop.run_until_complete(steer_vehicle(Screen()))
+        with Screen() as screen:
+            loop.run_until_complete(steer_vehicle(screen))
     except KeyboardInterrupt:
         print("Finishing remote control...")
+    except Exception as e:
+        print("Raised unexpected error: %s" % e)
     finally:
         GPIO.cleanup()
 
@@ -31,5 +34,7 @@ def show_distance() -> None:
         loop.run_until_complete(show_distance_func())
     except KeyboardInterrupt:
         print("Finishing measuring distance...")
+    except Exception as e:
+        print("Raised unexpected error: %s" % e)
     finally:
         GPIO.cleanup()
