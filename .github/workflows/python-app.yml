@@ -16,23 +16,29 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
+
     - name: Install dependencies
       run: |
         python -m pip install pip==21.3.1
         pip install -r requirements/dev.txt
+
     - name: Lint with mypy
       run: |
         mypy src/ tests/ --pretty --show-error-context
+
     - name: Lint with black
       run: |
         black src/ tests/ -v
+
     - name: Lint with flake8
       run: |
         flake8 src/ tests/ --count --show-source --statistics
+
     - name: Test with pytest
       run: |
         pytest -vv
