@@ -5,6 +5,7 @@ try:
     import RPi.GPIO as GPIO
 except (RuntimeError, ModuleNotFoundError):
     import fake_rpi
+
     GPIO = fake_rpi.RPi.GPIO
 
 
@@ -41,11 +42,12 @@ def _drive_left_engine_backward() -> None:
     GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.HIGH)
 
 
-def drive_with_intervals(drive_callback: Callable, movement_time=0.1) -> Callable:
-    def inner():
+def drive_with_intervals(drive_callback: Callable[[], None], movement_time: float = 0.1) -> Callable[[], None]:
+    def inner() -> None:
         drive_callback()
         time.sleep(movement_time)
         stop_driving()
+
     return inner
 
 
@@ -80,17 +82,17 @@ def stop_driving() -> None:
     GPIO.output(LEFT_ENGINE_BACKWARD_PIN_IDX, GPIO.LOW)
 
 
-def turn_right_on_angle(angle):
+def turn_right_on_angle(angle: float) -> None:
     pass
 
 
-def turn_left_on_angle(angle):
+def turn_left_on_angle(angle: float) -> None:
     pass
 
 
-def drive_forward_on_units(unit: int = 1):
+def drive_forward_on_units(unit: int = 1) -> None:
     pass
 
 
-def drive_backward_on_units(unit: int = 1):
+def drive_backward_on_units(unit: int = 1) -> None:
     pass

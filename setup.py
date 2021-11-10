@@ -20,6 +20,8 @@ setup(
     author="Albert Suraliński",
     author_email="albert.suralinski@gmail.com",
     url="https://github.com/Albert-91/precon",
+    license="MIT",
+    license_file="LICENSE",
     python_requires=">=3.8",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
