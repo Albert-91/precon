@@ -27,9 +27,12 @@ jobs:
     - name: Lint with mypy
       run: |
         mypy src/ tests/ --pretty --show-error-context
+    - name: Lint with black
+      run: |
+        black src/ tests/ -v
     - name: Lint with flake8
       run: |
-        flake8 --count --show-source --statistics
+        flake8 src/ tests/ --count --show-source --statistics
     - name: Test with pytest
       run: |
         pytest -vv
