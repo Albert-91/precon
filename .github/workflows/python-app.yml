@@ -30,7 +30,7 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-   - name: Install all dev dependencies
+    - name: Install all dev dependencies
       run: |
         pipenv sync --dev
         pipenv shell
