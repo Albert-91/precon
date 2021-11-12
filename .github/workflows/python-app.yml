@@ -33,20 +33,19 @@ jobs:
     - name: Install all dev dependencies
       run: |
         pipenv sync --dev
-        pipenv shell
 
     - name: Lint with mypy
       run: |
-        mypy src/ tests/ --pretty --show-error-context
+        pipenv run mypy src/ tests/ --pretty --show-error-context
 
     - name: Lint with black
       run: |
-        black src/ tests/ -v
+        pipenv run black src/ tests/ -v
 
     - name: Lint with flake8
       run: |
-        flake8 src/ tests/ --count --show-source --statistics
+        pipenv run flake8 src/ tests/ --count --show-source --statistics
 
     - name: Test with pytest
       run: |
-        pytest -vv
+        pipenv run pytest -vv
